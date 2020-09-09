@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import {
   Link,
+  useLocation
 } from "react-router-dom";
 import { Menu } from 'antd';
 import { UnorderedListOutlined } from '@ant-design/icons';
@@ -10,11 +11,10 @@ import router from '@/router'
 const { SubMenu } = Menu;
 
 
-function Index(props) {
-
-  const [current, setCurrent] = useState('/home')
+function Index() {
   const [iswidth, setIsWidth] = useState(true)
   const navs = router.filter(i => i.hide !== true)
+  const pathname =  useLocation().pathname
   useEffect(() => {
     if (document.body.clientWidth > 800) {
       setIsWidth(true)
@@ -28,9 +28,7 @@ function Index(props) {
 
   }, [])
 
-  const handleClick = e => {
-    setCurrent(e.key);
-  };
+
 
   const styles = {fontSize:'16px',fontWeight:'400'}
   
@@ -41,7 +39,7 @@ function Index(props) {
         {
           iswidth
             ?
-            <Menu onClick={handleClick} selectedKeys={[current]} mode="horizontal">
+            <Menu selectedKeys={[pathname === '/'? '/home': pathname]} mode="horizontal">
               {navs.map(item => {
                 return (
                   <Menu.Item key={item.path}>
@@ -52,7 +50,7 @@ function Index(props) {
             </Menu>
             :
 
-            <Menu onClick={handleClick} selectedKeys={[current]}>
+            <Menu selectedKeys={[pathname === '/'? '/home': pathname]}>
 
               <SubMenu icon={<UnorderedListOutlined style={{ fontSize: "20px" }} />}>
                 {navs.map(item => {
