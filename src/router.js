@@ -63,6 +63,7 @@ const Error = loadable(() => import('./pages/Error'))
     hide:true,
     component:<Detail />,
   },
+
   {
     path: '/uploadText',
     name: '上传文章',

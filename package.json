@@ -17,12 +17,14 @@
     "react": "^16.13.1",
     "react-app-rewired": "^2.1.6",
     "react-dom": "^16.13.1",
+    "react-markdown": "^4.3.1",
     "react-router-dom": "^5.2.0",
     "react-scripts": "3.4.3",
+    "react-syntax-highlighter": "^13.5.3",
     "uglifyjs-webpack-plugin": "^2.2.0"
   },
   "scripts": {
-    "start": "react-app-rewired start",
+    "start": "set PORT=3200 && react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-scripts eject"
@@ -42,5 +44,8 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "."
+  "homepage": ".",
+  "devDependencies": {
+    "raw-loader": "^4.0.1"
+  }
 }

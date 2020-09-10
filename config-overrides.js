@@ -47,7 +47,11 @@ module.exports = {
       // 即：config.module.rules[2].oneof  (如果不是，具体可以打印 一下是第几项目)
       // 修改 sass 配置 ，规则 loader 在第五项(具体看配置) sass在6,7,less在8，9项
       const loaders = config.module.rules.find(rule => Array.isArray(rule.oneOf)).oneOf;
- 
+      // console.log(loaders)
+      loaders.push({  
+          test: /\.md$/,
+          use: "raw-loader"
+      })
     //   loaders[5].use.push({
     //     loader: 'sass-resources-loader',
     //     options: {

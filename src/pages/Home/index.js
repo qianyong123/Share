@@ -6,7 +6,7 @@ import {
 } from "react-router-dom";
 import { Row, Col } from 'antd';
 import ListItem from '@/components/ListItem'
-import { DataList } from '@/components/Data'
+import  DataList  from '@/md'
 
 const Index = () => {
   const { xs, sm, md, lg, xl, xxl } = {

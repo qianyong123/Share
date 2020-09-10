@@ -4,13 +4,12 @@ import React, { useEffect, useState } from 'react'
 import {
   useLocation,
 } from "react-router-dom";
-import { DataList } from '@/components/Data'
-
+import DataList from '@/md'
+import Markdown from '@/components/Markdown'
 
 const Index = () => {
   const [width, setIsWidth] = useState(true)
   let Params = useLocation();
-
   const obj = DataList.find(i => i.id === Params.state.id)
   useEffect(() => {
     if (document.body.clientWidth > 800) {
@@ -46,7 +45,8 @@ const Index = () => {
           </div>}
       <div className="detail">
         <article>
-          <div dangerouslySetInnerHTML={{ __html: obj.text }}></div>
+          {/* <div dangerouslySetInnerHTML={{ __html: obj.text }}></div> */}
+          <Markdown md={obj.text} />
         </article>
       </div>
     </div>
