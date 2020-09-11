@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react'
-import ReactMarkdown from 'react-markdown'
+import ReactMarkdown from 'react-markdown/with-html'
 import CodeBlock from './CodeBlock'
 // import {  linuxNodeJs,GitOrder,CssCenter } from '@/md'
 
@@ -19,7 +19,7 @@ const Index = ({ md }) => {
       source={value}
       // escapeHtml={false}
       renderers={{
-        // code:CodeBlock,
+        code:CodeBlock,
         // // heading: HeadingBlock
       }}
     />
