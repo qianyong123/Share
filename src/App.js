@@ -8,12 +8,12 @@ import {
 } from "react-router-dom";
 import './App.less';
 import router from './router'
-import Head from '@/components/Header'
+import Header from '@/components/Header'
 // import Footers from '@/components/Footer'
 
 
 
-const { Header, Footer, Content } = Layout;
+const {Footer, Content } = Layout;
 
 class App extends React.Component {
 
@@ -21,9 +21,7 @@ class App extends React.Component {
     return (
       <Router>
         <Layout style={{height:'100%'}}>
-          <Header className="headersBox">
-            <Head />
-          </Header>
+          <Header />
           <Content className="Content">
             <Switch>
               {
@@ -35,13 +33,14 @@ class App extends React.Component {
                   )
                 })
               }
-              <Redirect form="*" to="/error" />
+               <Redirect form="*" to="/error" />
             </Switch>
           </Content>
           {/* <Footer>
             <Footers />
           </Footer> */}
         </Layout>
+     
       </Router>
 
 

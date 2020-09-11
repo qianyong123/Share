@@ -9,14 +9,20 @@ import Markdown from '@/components/Markdown'
 
 const Index = () => {
   const [width, setIsWidth] = useState(true)
-  let Params = useLocation();
-  const obj = DataList.find(i => i.id === Params.state.id)
   useEffect(() => {
     if (document.body.clientWidth > 800) {
       setIsWidth(true)
     } else setIsWidth(false)
 
   }, [])
+
+  let Params = useLocation();
+
+  if(!Params.state){
+    return <h3 style={{padding:50,textAlign:'center'}}>暂无数据</h3>
+  }
+
+  const obj = DataList.find(i => i.id === Params.state.id)
 
   const numbers = parseInt(Math.random() * 9) + 1
   // console.log(Params,numbers)
