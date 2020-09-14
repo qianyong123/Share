@@ -1,12 +1,21 @@
 
 
-import React from 'react'
+import React,{useEffect,useState} from 'react'
 import {
   useLocation
 } from "react-router-dom";
 import { Row, Col } from 'antd';
 import ListItem from '@/components/ListItem'
-import  DataList  from '@/md'
+import
+DataList,
+{
+  HtmlCssList,
+  JsList,
+  ReactList,
+  VueList,
+  RestList
+}
+  from '@/md'
 
 const Index = () => {
   const { xs, sm, md, lg, xl, xxl } = {
@@ -17,39 +26,48 @@ const Index = () => {
     xl: { span: 6, offset: 0 }, //≥1200px
     xxl: { span: 6, offset: 0 }, //≥1600px
   }
+  const [List,SetList] = useState([])
   const location = useLocation()
-  let DataList2 = []
 
-  switch (location.pathname) {
-    case '/js':
-      DataList2 = DataList.filter(i => i.classify === 'js');
-      break;
-    case '/css':
-      DataList2 = DataList.filter(i => i.classify === 'css');
-      break;
-    case '/vue':
-      DataList2 = DataList.filter(i => i.classify === 'vue');
-      break;
-    case '/react':
-      DataList2 = DataList.filter(i => i.classify === 'react');
-      break;
-    case '/rest':
-      DataList2 = DataList.filter(i => i.classify === 'rest');
-      break;
-    default:
-      DataList2 = DataList
-  }
+  useEffect(()=>{
+    let DataList2 = []
+    switch (location.pathname) {
+      case '/js':
+        DataList2 = JsList;
+        break;
+      case '/css':
+        DataList2 = HtmlCssList;
+        break;
+      case '/vue':
+        DataList2 = VueList;
+        break;
+      case '/react':
+        DataList2 = ReactList;
+        break;
+      case '/rest':
+        DataList2 = RestList;
+        break;
+      default:
+        DataList2 = DataList
+    }
+    DataList2 = DataList2.sort((a,b)=>{
+      return a.time < b.time ? 1 : -1
+    })
+    SetList(DataList2)
+  },[location])
+
+ 
   // console.log(location.pathname)
 
   return (
     <div className="home">
       <Row>
         {
-          DataList2.length < 1
+          List.length < 1
             ?
             <h3 className="noneData">暂无数据</h3>
             :
-            DataList2.map(item => {
+            List.map(item => {
               return (
                 <Col key={item.id} xs={xs} sm={sm} md={md} lg={lg} xl={xl} xxl={xxl}>
                   <ListItem item={item} />
