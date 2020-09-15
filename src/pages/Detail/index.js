@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import {
   useLocation,
+  useParams
 } from "react-router-dom";
 import DataList from '@/md'
 import Markdown from '@/components/Markdown'
@@ -17,12 +18,16 @@ const Index = () => {
   }, [])
 
   let Params = useLocation();
-
-  if(!Params.state){
+  let ids = Params.search.indexOf('?id')
+  // console.log(Params,ids)
+  if(ids === -1){
     return <h3 style={{padding:50,textAlign:'center'}}>暂无数据</h3>
   }
 
-  const obj = DataList.find(i => i.id === Params.state.id)
+  let id = Params.search.slice(ids).split('=')[1]
+
+
+  const obj = DataList.find(i => i.id === id)
 
   const numbers = parseInt(Math.random() * 9) + 1
   // console.log(Params,numbers)

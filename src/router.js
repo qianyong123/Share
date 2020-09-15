@@ -33,6 +33,12 @@ const Error = loadable(() => import('./pages/Error'))
     ]
   },
   {
+    path: '/note',
+    name: 'note',
+    hide:true,
+    component:<Note />,
+  },
+  {
     path: '/js',
     name: 'JavaScript',
     component:<Home />,
