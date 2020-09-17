@@ -3,7 +3,7 @@ import Git1  from './Git常用命令.md'
 import Linux1  from './Linux和Nginx常用操作命令.md'
 import linuxNode1  from './Liunx系统安装nodejs和环境配置.md'
 import Md1  from './md常用语法.md'
-
+import Mysql from './Linux系统上安装mysql.md'
 
 const RestList = [
   {
@@ -38,6 +38,14 @@ const RestList = [
     classify:'rest',
     title:"md常用语法",
     text:Md1,
+  },
+  {
+    id:`2020091601`,
+    type:"mysql",
+    time:"2020-09-16",
+    classify:'rest',
+    title:"Linux系统上安装 mysql数据库",
+    text:Mysql,
   },
 ]
 

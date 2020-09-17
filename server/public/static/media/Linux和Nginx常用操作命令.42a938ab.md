@@ -44,8 +44,3 @@
 - cp -a /tmp/dir1 . 复制一个目录到当前工作目录 
 - cp -a dir1 dir2 复制一个目录 
 
-- quit 退出debugfs
-
-
-set password for root@localhost = password('qianyong123')
-

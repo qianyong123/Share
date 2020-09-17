@@ -17,6 +17,14 @@ const {Footer, Content } = Layout;
 
 class App extends React.Component {
 
+  componentDidMount(){
+    fetch('/sqlTest')
+    .then(response=> response.json())
+    .then(res => {
+      console.log(res)
+    })
+  }
+
   render() {
     return (
       <Router>

@@ -11,6 +11,7 @@ git init
 
 ### 版本管理
 
+图片
 
 
 - git status当前状态
