@@ -5,6 +5,7 @@ const Home = loadable(() => import('./pages/Home'))
 const Note = loadable(() => import('./pages/Note'))
 const Detail = loadable(() => import('./pages/Detail'))
 const UploadText = loadable(() => import('./pages/UploadText'))
+const Admin = loadable(() => import('./pages/Admin'))
 
 
 const Error = loadable(() => import('./pages/Error'))
@@ -20,7 +21,7 @@ const Error = loadable(() => import('./pages/Error'))
     hide:true
   },
   {
-    path: '/home',
+    path: '/Home',
     name: '首页',
     component:<Home />,
     children:[
@@ -32,6 +33,13 @@ const Error = loadable(() => import('./pages/Error'))
      
     ]
   },
+
+  {
+    path: '/Admin',
+    name: 'Admin',
+    hide:true,
+    component:<Admin />,
+  },
   {
     path: '/note',
     name: 'note',
@@ -39,32 +47,32 @@ const Error = loadable(() => import('./pages/Error'))
     component:<Note />,
   },
   {
-    path: '/js',
+    path: '/JavaScript',
     name: 'JavaScript',
     component:<Home />,
   },
   {
-    path: '/css',
+    path: '/HtmlCss',
     name: 'HtmlCss',
     component:<Home />,
   },
   {
-    path: '/vue',
+    path: '/Vue',
     name: 'Vue',
     component:<Home />,
   },
   {
-    path: '/react',
+    path: '/React',
     name: 'React',
     component:<Home />,
   },
   {
-    path: '/rest',
+    path: '/Rest',
     name: '杂类技术',
     component:<Home />,
   },
   {
-    path: '/detail',
+    path: '/Detail',
     name: 'detail',
     hide:true,
     component:<Detail />,

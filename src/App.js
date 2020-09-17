@@ -7,6 +7,7 @@ import {
   Redirect
 } from "react-router-dom";
 import './App.less';
+import fetching from './util/fetching'
 import router from './router'
 import Header from '@/components/Header'
 // import Footers from '@/components/Footer'
@@ -18,8 +19,7 @@ const {Footer, Content } = Layout;
 class App extends React.Component {
 
   componentDidMount(){
-    fetch('/sqlTest')
-    .then(response=> response.json())
+    fetching('/api/query',{method:'GET', data: {name:"111"}})
     .then(res => {
       console.log(res)
     })

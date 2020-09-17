@@ -11,9 +11,15 @@ var pool = mysql.createPool(dbConfig);
  */
 function responseDoReturn(res,result,err){
     if (typeof result === 'undefined'){
-        res.json(err);
+        res.json({
+            code:201,
+            msg:err
+        });
     } else {
-        res.json(result);
+        res.json({
+            code:200,
+            data:result
+        });
     }
 };
 
@@ -23,7 +29,7 @@ function responseDoReturn(res,result,err){
 function query(req, res, next){
     pool.getConnection(function(err, connection){
         connection.query('select * FROM article_list',function(err2,rows){
-          console.log('rows',rows,err2)
+          console.log(req.query)
             responseDoReturn(res,rows,err2);
             // 释放数据库连接
             connection.release();

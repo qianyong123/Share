@@ -14,9 +14,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 //  引入新建的路由文件
-var sqlTestRouter = require('./routes/sqlTest'); 
+var apiRouter = require('./routes/api'); 
 // 映射路由访问地址
-app.use('/sqlTest',sqlTestRouter);
+app.use('/api',apiRouter);
 
 app.use(logger('dev'));
 app.use(express.json());

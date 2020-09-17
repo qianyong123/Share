@@ -36,7 +36,7 @@ function Index() {
 
   useEffect(() => {
 
-    if (path === '/detail') {
+    if (path === '/Detail') {
       setPathname(refPath.current)
     } else {
       refPath.current = path
@@ -54,7 +54,7 @@ function Index() {
           {
             iswidth
               ?
-              <Menu selectedKeys={[pathname === '/' ? '/home' : pathname]} mode="horizontal">
+              <Menu selectedKeys={[pathname === '/' ? '/Home' : pathname]} mode="horizontal">
                 {navs.map(item => {
                   return (
                     <Menu.Item key={item.path}>
@@ -65,7 +65,7 @@ function Index() {
               </Menu>
               :
 
-              <Menu selectedKeys={[pathname === '/' ? '/home' : pathname]}>
+              <Menu selectedKeys={[pathname === '/' ? '/Home' : pathname]}>
 
                 <SubMenu icon={<UnorderedListOutlined style={{ fontSize: "20px" }} />}>
                   {navs.map(item => {

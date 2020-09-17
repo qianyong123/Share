@@ -28,23 +28,23 @@ const Index = () => {
   }
   const [List,SetList] = useState([])
   const location = useLocation()
-
+ 
   useEffect(()=>{
     let DataList2 = []
     switch (location.pathname) {
-      case '/js':
+      case '/JavaScript':
         DataList2 = JsList;
         break;
-      case '/css':
+      case '/HtmlCss':
         DataList2 = HtmlCssList;
         break;
-      case '/vue':
+      case '/Vue':
         DataList2 = VueList;
         break;
-      case '/react':
+      case '/React':
         DataList2 = ReactList;
         break;
-      case '/rest':
+      case '/Rest':
         DataList2 = RestList;
         break;
       default:

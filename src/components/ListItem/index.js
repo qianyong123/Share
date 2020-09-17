@@ -11,7 +11,7 @@ const Index = ({item:{id, type, time, title }}) => {
   let history = useHistory();
 
   const onClick = () => {
-    history.push(`/detail?id=${id}`,{
+    history.push(`/Detail?id=${id}`,{
       id
     })
   }
