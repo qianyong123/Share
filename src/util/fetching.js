@@ -1,4 +1,6 @@
 
+import {message} from 'antd'
+
 function fetching(
   url,
   {
@@ -9,7 +11,9 @@ function fetching(
   }
   
 ) {
-  const pramas = {}
+  const pramas = {
+    method
+  }
 
   if (method === 'POST') {
     pramas.body = JSON.stringify(body)
@@ -36,6 +40,14 @@ function fetching(
 
   return fetch(url, pramas)
     .then(response => response.json())
+    .then(res => {
+
+      if(res && res.code !== 200){
+        message.error(JSON.stringify(res.msg) || '服务器错误')
+        return false
+      }
+      return res
+    })
     .catch((err) => {
       console.log('err', err)
     })

@@ -11,6 +11,7 @@ var pool = mysql.createPool(dbConfig);
  */
 function responseDoReturn(res,result,err){
     if (typeof result === 'undefined'){
+        console.log('err', err)
         res.json({
             code:201,
             msg:err
@@ -29,7 +30,6 @@ function responseDoReturn(res,result,err){
 function query(req, res, next){
     pool.getConnection(function(err, connection){
         connection.query('select * FROM article_list',function(err2,rows){
-          console.log(req.query)
             responseDoReturn(res,rows,err2);
             // 释放数据库连接
             connection.release();
@@ -37,7 +37,22 @@ function query(req, res, next){
     })
 }
 
+function add(req, res, next){
+    const {text,type,classify,title,time} = req.body 
+    console.log(req.body )
+    const sql = `INSERT INTO article_list VALUES (${null},'${text}','${type}','${classify}','${title}','${time}')`
+    pool.getConnection(function(err, connection){
+        connection.query(sql,function(err2,rows){
+            responseDoReturn(res,rows,err2);
+            // 释放数据库连接
+            connection.release();
+        })
+    })
+}
+
+
 // 导出模块
 module.exports = {
-    queryAll: query
+    queryAll: query,
+    add
 }

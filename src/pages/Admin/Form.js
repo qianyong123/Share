@@ -7,6 +7,7 @@ import {
   DatePicker,
   Select
 } from 'antd'
+import UploadFile from '../../components/UploadFile'
 
 const { Option } = Select;
 
@@ -25,7 +26,9 @@ function FormComp(props) {
     title,
     modalVisible,
     modalType,
-    onCancelClick
+    onCancelClick,
+    submitForm,
+    item
   } = props
 
 
@@ -34,19 +37,29 @@ function FormComp(props) {
     wrapperCol: { span: 14 },
   }
 
-  const onReset = () => {
-    form.resetFields();
-  };
-
+  const initialValues = {
+    ...item
+  }
 
   const handSubmit = async () => {
+    const mdUrl = `@/md/`
     try {
       const values = await form.validateFields();
+      values.time = values.time ? values.time.format('YYYY-MM-DD') : '';
+      values.text = `${mdUrl}${values.classify}/${values.text}`
+      submitForm(values,()=>{
+        form.resetFields()
+      })
       console.log('Success:', values);
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
   };
+
+  const cancel = ()=> {
+    form.resetFields()
+    onCancelClick()
+  }
 
   return (
     <Modal
@@ -56,7 +69,7 @@ function FormComp(props) {
           <Button type="primary" onClick={handSubmit}>
             提交
           </Button>,
-          <Button onClick={onCancelClick} style={{ marginLeft: '16px' }}>
+          <Button onClick={cancel} style={{ marginLeft: '16px' }}>
             取消
             </Button>]
       }
@@ -71,7 +84,7 @@ function FormComp(props) {
         form={form}
         {...layout}
         name="basic"
-        initialValues={{ username: '111' }}
+        initialValues={initialValues}
       >
         <Form.Item
           label="标题"
@@ -100,8 +113,9 @@ function FormComp(props) {
           rules={[{ required: true, message: '技术分类' }]}
         >
           <Select allowClear>
-            <Option value="jack">Jack</Option>
-            <Option value="lucy">Lucy</Option>
+            {
+              classList.map(v => <Option value={v}>{v}</Option>)
+            }
           </Select>
         </Form.Item>
         <Form.Item
@@ -109,7 +123,7 @@ function FormComp(props) {
           name="text"
           rules={[{ required: true, message: '上传文章' }]}
         >
-          <Input />
+          <UploadFile />
         </Form.Item>
       </Form>
 

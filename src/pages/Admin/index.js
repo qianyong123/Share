@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { Layout, message,Button, Card } from 'antd'
+import { Layout, message,Button, Card,Modal} from 'antd'
 import {
   PlusOutlined
 } from '@ant-design/icons';
 import Filter from './Filter'
 import TableList from './Table'
 import FormComp from './Form'
-
+import fetching from '@/util/fetching'
 
 
 /**
@@ -25,14 +25,13 @@ class IndexClassification extends Component {
         modalVisible: false,
       },
       filterFormValues: {},
-      ReserveLevel: [
-      
-      ]
+      ReserveLevel: [],
+      data:[]
     }
   
 
   componentDidMount() {
-    const { filterFormValues } = this.state
+    this.requestList()
   }
 
   requestBasicsGrade = () => { // 获取评分
@@ -81,47 +80,63 @@ class IndexClassification extends Component {
   }
 
   requestList = (params = {}) => {
-    const { dispatch } = this.props
- 
+    let that = this
+    fetching('/api/query',{ data: params})
+    .then(res => {
+      console.log(res)
+      if(res && res.code === 200){
+        that.setState({data:res.data})
+      }
+    })
   }
 
 
 
   // 提交
-  handleFormSubmit = (id,values) => {
-    
+  handleFormSubmit = (values,callback) => {
+    fetching('/api/add',{method:'POST', body: values})
+    .then(res => {
+      if(callback) callback()
+      this.handleModalVisible(false)
+      console.log(res)
+    })
   
   }
 
 
 
   // 编辑
-  handEdit = async ({ id, state }) => {
-  
-
+  handEdit = async (values={}) => {
+  console.log(values)
+  this.handleModalVisible(true,'edit',values)
   }
 
- 
-
-  disposeGrade = (item) => {
-    const table = []
-    const { targetNameList = [], targetSortType, score } = item
-    targetNameList.forEach((item2) => {
-      const examContentList = item2.examContentList || []
-      examContentList.forEach((item3, index3) => {
-        const obj = {
-          targetSortType: `${targetSortType} (${score})`,
-          targetName: `${item2.targetName} (${item2.score})`,
-          examContent: `${item3.examContent}`,
-          score: `${item3.score}`,
-        }
-        if (index3 === 0) obj.len2 = examContentList.length
-        table.push(obj)
-      })
+  
+  handleDelete = id => {
+    const self = this
+    const { dispatch } = this.props
+    Modal.confirm({
+      title: '确定要删除这个数据吗？',
+      content: '删除后，无法恢复。',
+      okType: 'danger',
+      okText: '删除',
+      cancelText: '取消',
+      onOk() {
+        // dispatch({
+        //   type: 'evaluationSystemFillForm/remove',
+        //   payload: {
+        //     id,
+        //   },
+        //   callback: () => {
+        //     message.success('删除成功')
+        //     self.setState({
+        //       selectedRows: [],
+        //     })
+        //     self.handleSearch()
+        //   },
+        // })
+      },
     })
-
-    if (table.length > 0) table[0].len = table.length
-    return table
   }
 
   handleStandardTableChange = (pagination, filtersArg, sorter) => {
@@ -137,12 +152,10 @@ class IndexClassification extends Component {
     // this.requestList(params)
   }
 
+ 
+
   render() {
-    const { modal, ReserveLevel, filterFormValues } = this.state
-    const {
-      listLoading,
-      data=[],
-    } = this.props
+    const { modal, ReserveLevel, filterFormValues,data } = this.state
 
     return (
       <div>
@@ -170,10 +183,10 @@ class IndexClassification extends Component {
               selectedMode={false}
               selectedRows={false}
               rowSelection={false}
-              loading={listLoading}
               data={data}
               onChange={this.handleStandardTableChange}
               onEdit={this.handEdit}
+              onDelete={this.handleDelete}
             />
           </Card>
         </Layout>

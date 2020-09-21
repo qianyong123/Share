@@ -7,6 +7,8 @@ import CodeBlock from './CodeBlock'
 const Index = ({ md }) => {
   const [value, setValue] = useState()
   useEffect(() => {
+    console.log(md)
+    const url = require('@/md/HtmlCss/Css垂直居中.md')
     fetch(md)
       .then(res => res.text())
       .then(text => {

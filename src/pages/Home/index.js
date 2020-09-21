@@ -1,10 +1,10 @@
 
 
-import React,{useEffect,useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   useLocation
 } from "react-router-dom";
-import { Row, Col } from 'antd';
+import { Row, Col, Pagination } from 'antd';
 import ListItem from '@/components/ListItem'
 import
 DataList,
@@ -17,7 +17,6 @@ DataList,
 }
   from '@/md'
 
-const Index = () => {
   const { xs, sm, md, lg, xl, xxl } = {
     xs: { span: 24, offset: 0 }, //<576px
     sm: { span: 12, offset: 0 }, //≥576px
@@ -26,10 +25,16 @@ const Index = () => {
     xl: { span: 6, offset: 0 }, //≥1200px
     xxl: { span: 6, offset: 0 }, //≥1600px
   }
-  const [List,SetList] = useState([])
-  const location = useLocation()
+const Index = () => {
  
-  useEffect(()=>{
+  const [List, SetList] = useState([])
+  const [pageNumber, setpageNumber] = useState(1)
+  const [pageSize, setpageSize] = useState(10)
+
+
+  const location = useLocation()
+
+  useEffect(() => {
     let DataList2 = []
     switch (location.pathname) {
       case '/JavaScript':
@@ -50,14 +55,19 @@ const Index = () => {
       default:
         DataList2 = DataList
     }
-    DataList2 = DataList2.sort((a,b)=>{
+    DataList2 = DataList2.sort((a, b) => {
       return a.time < b.time ? 1 : -1
     })
     SetList(DataList2)
-  },[location])
+  }, [location])
 
- 
+
   // console.log(location.pathname)
+  function onChange(pageNumber,pageSize) {
+    console.log('Page: ', pageNumber,pageSize);
+    setpageNumber(pageNumber)
+    setpageSize(pageSize)
+  }
 
   return (
     <div className="home">
@@ -76,6 +86,14 @@ const Index = () => {
             })
         }
       </Row>
+      <Pagination
+        style={{ padding:"40px 20px",}}
+        current={pageNumber}
+        pageSize={pageSize}
+        total={50}
+        showSizeChanger
+        onChange={onChange}
+      />
     </div>
   );
 }

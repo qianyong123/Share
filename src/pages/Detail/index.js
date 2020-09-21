@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import DataList from '@/md'
 import Markdown from '@/components/Markdown'
+import './index.less'
 
 const Index = () => {
   const [width, setIsWidth] = useState(true)

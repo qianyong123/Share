@@ -41,7 +41,7 @@ const RestList = [
   },
   {
     id:`2020091601`,
-    type:"mysql",
+    type:"Mysql",
     time:"2020-09-16",
     classify:'rest',
     title:"Linux系统上安装 mysql数据库",
