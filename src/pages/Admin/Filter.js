@@ -7,13 +7,12 @@ const FormItem = Form.Item
 
 
 
-
 function Filter(props) {
 
   const {
     onSearch,
     resetForm,
-
+    classList
   } = props
   const [form] = Form.useForm();
 
@@ -23,12 +22,13 @@ function Filter(props) {
     resetForm()
   }
 
- 
+
   const onFinish = values => {
+    onSearch(values)
     console.log(values);
   };
 
- 
+
   const formItemLayout = {
     layout: 'inline',
     labelAlign: 'left',
@@ -38,9 +38,17 @@ function Filter(props) {
   return (
     <div>
       <Form onFinish={onFinish} form={form} {...formItemLayout}>
-        <Form.Item name="name">
-          <Input placeholder="输入标题关键字" />
+        <Form.Item name="title">
+          <Input allowClear placeholder="输入标题关键字" />
         </Form.Item>
+        <Form.Item name="classify">
+          <Select style={{width:150}} placeholder="请选择技术分类" allowClear>
+            {
+              classList.map(v => <Option key={v.id} value={v.name}>{v.name}</Option>)
+            }
+          </Select>
+        </Form.Item>
+
         <FormItem>
           <Button type="primary" htmlType="submit">
             查询

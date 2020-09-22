@@ -23,11 +23,16 @@ function TableList(props) {
     onChange,
     onEdit,
     onDelete,
-    data
+    data,
+    total
   } = props
-  console.log(data)
+  
+  const pagination= {
+    total,
+    showSizeChanger:true,
+    onChange:onChange
+  }
   const columns = [
-
     {
       title: '序号',
       key: 'number',
@@ -60,6 +65,13 @@ function TableList(props) {
       align: 'center',
     },
     {
+      title: '技术分类',
+      dataIndex: 'classify',
+      key: 'classify',
+      align: 'center',
+    },
+  
+    {
       title: '创建时间',
       dataIndex: 'time',
       key: 'time',
@@ -67,12 +79,6 @@ function TableList(props) {
       render: text => (
         <div>{ text}</div>
       ),
-    },
-    {
-      title: '技术分类',
-      dataIndex: 'classify',
-      key: 'classify',
-      align: 'center',
     },
     {
       title: '操作',
@@ -111,10 +117,10 @@ function TableList(props) {
     <Table
       columns={columns}
       dataSource={data}
-      onChange={onChange}
       rowKey="id"
       // scroll={{ x: 'max-content', y: 400 }}
       size="middle"
+      pagination={pagination}
     />
   )
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, message,Button, Card,Modal} from 'antd'
+import { Layout, message, Button, Card, Modal } from 'antd'
 import {
   PlusOutlined
 } from '@ant-design/icons';
@@ -15,28 +15,30 @@ import fetching from '@/util/fetching'
  */
 class IndexClassification extends Component {
 
- 
 
-    state = {
-      // selectedRows: selectedIds,
-      modal: {
-        item: {},
-        modalType: 'new',
-        modalVisible: false,
-      },
-      filterFormValues: {},
-      ReserveLevel: [],
-      data:[]
-    }
-  
+
+  state = {
+    // selectedRows: selectedIds,
+    modal: {
+      item: {},
+      modalType: 'new',
+      modalVisible: false,
+    },
+    filterFormValues: {},
+    data: [],
+    total: 0,
+    classList: []
+  }
+
 
   componentDidMount() {
     this.requestList()
+    this.getClassify()
   }
 
   requestBasicsGrade = () => { // 获取评分
     const { dispatch } = this.props
-  
+
   }
 
   handleModalVisible = (visible = {}, type, data, target) => {
@@ -61,9 +63,9 @@ class IndexClassification extends Component {
     }))
   }
 
-  handleSearch = (values = {}) => {
+  handleSearch = (values) => {
     this.setState({
-      filterFormValues: values,
+      filterFormValues: values || {},
     })
 
     this.requestList(values)
@@ -71,47 +73,68 @@ class IndexClassification extends Component {
 
   // 重置
   handleFormReset = () => {
-    const filterFormValues = {
-    }
+    const filterFormValues = {}
     this.setState({
       filterFormValues
     })
     this.requestList(filterFormValues)
   }
 
-  requestList = (params = {}) => {
+  requestList = (params) => {
+    const { filterFormValues } = this.state
     let that = this
-    fetching('/api/query',{ data: params})
-    .then(res => {
-      console.log(res)
-      if(res && res.code === 200){
-        that.setState({data:res.data})
-      }
-    })
+    fetching('/api/admin/query', { data: params || filterFormValues })
+      .then(res => {
+        if (res) {
+          that.setState({
+            data: res.data,
+            total: res.total
+          })
+        }
+      })
+  }
+
+  // 获取分类
+  getClassify = () => {
+    let that = this
+    fetching('/api/admin/ClassifyList')
+      .then(res => {
+        if (res) {
+          that.setState({ classList: res.data })
+        }
+      })
   }
 
 
 
+
   // 提交
-  handleFormSubmit = (values,callback) => {
-    fetching('/api/add',{method:'POST', body: values})
-    .then(res => {
-      if(callback) callback()
-      this.handleModalVisible(false)
-      console.log(res)
-    })
-  
+  handleFormSubmit = (values, callback) => {
+    fetching('/api/admin/add', { method: 'POST', body: values })
+      .then(res => {
+        if (res) {
+          if (callback) callback()
+          this.handleModalVisible(false)
+          message.success('操作成功')
+          this.requestList()
+        }
+      })
+
   }
 
 
 
   // 编辑
-  handEdit = async (values={}) => {
-  console.log(values)
-  this.handleModalVisible(true,'edit',values)
+  handEdit = async (id) => {
+    // fetching('/api/admin/detail', { data: { id } })
+    //   .then(res => {
+    //     if (res.data) {
+    //       setObj(res.data[0])
+    //     }
+    //   })
+    this.handleModalVisible(true, 'edit', {})
   }
 
-  
   handleDelete = id => {
     const self = this
     const { dispatch } = this.props
@@ -139,23 +162,20 @@ class IndexClassification extends Component {
     })
   }
 
-  handleStandardTableChange = (pagination, filtersArg, sorter) => {
+  handleStandardTableChange = (pageNumber, pageSize) => {
     const { filterFormValues } = this.state
 
     const params = {
-      pageNum: (pagination.current - 1) * pagination.pageSize,
-      current: pagination.current,
-      pageSize: pagination.pageSize,
-   
+      pageNumber,
+      pageSize,
     }
-    console.log(params)
-    // this.requestList(params)
+    this.requestList({ ...filterFormValues, ...params })
   }
 
- 
+
 
   render() {
-    const { modal, ReserveLevel, filterFormValues,data } = this.state
+    const { modal, filterFormValues, data, classList, total } = this.state
 
     return (
       <div>
@@ -164,13 +184,13 @@ class IndexClassification extends Component {
             <Filter
               resetForm={this.handleFormReset}
               onSearch={this.handleSearch}
-              ReserveLevel={ReserveLevel}
               filterFormValues={filterFormValues}
+              classList={classList}
             />
           </Card>
           <Card bordered={false}>
             <div style={{ marginBottom: 5 }}>
-              <span>共有<b>{ 0}</b>条信息，共<b>0</b>页</span>
+              <span>共有<b>{total}</b>条信息</span>
               <Button
                 icon={<PlusOutlined />}
                 onClick={() => this.handleModalVisible(true)}
@@ -187,6 +207,7 @@ class IndexClassification extends Component {
               onChange={this.handleStandardTableChange}
               onEdit={this.handEdit}
               onDelete={this.handleDelete}
+              total={total}
             />
           </Card>
         </Layout>
@@ -196,6 +217,7 @@ class IndexClassification extends Component {
           {...modal}
           onCancelClick={() => this.handleModalVisible(false)}
           submitForm={this.handleFormSubmit}
+          classList={classList}
         />
 
 

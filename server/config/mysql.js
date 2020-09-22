@@ -12,5 +12,6 @@ module.exports = {
   //  要连接的数据库名
   database: 'share',
   //  数据库编码
-  charset: 'utf8_general_ci'
+  charset: 'utf8_general_ci',
+  multipleStatements: true //执行多条sql语句
  }

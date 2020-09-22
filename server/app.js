@@ -14,9 +14,9 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 //  引入新建的路由文件
-var apiRouter = require('./routes/api'); 
+var admin = require('./routes/admin'); 
 // 映射路由访问地址
-app.use('/api',apiRouter);
+app.use('/api/admin',admin);
 
 app.use(logger('dev'));
 app.use(express.json());

@@ -8,20 +8,23 @@ const Index = ({ md }) => {
   const [value, setValue] = useState()
   useEffect(() => {
     console.log(md)
-    const url = require('@/md/HtmlCss/Css垂直居中.md')
-    fetch(md)
-      .then(res => res.text())
-      .then(text => {
-        setValue(text)
-      }
-      )
-  }, [])
+    if (md) {
+      const url = require(`@/md/${md}`)
+      fetch(url)
+        .then(res => res.text())
+        .then(text => {
+          setValue(text)
+        }
+        )
+    }
+
+  }, [md])
   return (
     <ReactMarkdown
       source={value}
       // escapeHtml={false}
       renderers={{
-        code:CodeBlock,
+        code: CodeBlock,
         // // heading: HeadingBlock
       }}
     />

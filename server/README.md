@@ -2,6 +2,8 @@
 # nodejs express框架 配置热启动
 
 ```
+之前的启动
+"start": "node ./bin/www",
 安装
 cnpm install -g supervisor
 运行

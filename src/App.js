@@ -19,15 +19,7 @@ const {Footer, Content } = Layout;
 class App extends React.Component {
 
   componentDidMount(){
-    // fetching('/api/add',{method:'POST', body:  {
-    //   type:"HtmlCss",
-    //   time:"2020-09-06",
-    //   classify:'css',
-    //   title:"Css实现元素垂直居中显示的7种方式",
-    // },})
-    // .then(res => {
-    //   console.log(res)
-    // })
+
   }
 
   render() {

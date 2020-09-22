@@ -10,14 +10,7 @@ import {
 import UploadFile from '../../components/UploadFile'
 
 const { Option } = Select;
-
-const classList = [
-  'HtmlCss',
-  'JavaScript',
-  'React',
-  'Vue',
-  'Rest'
-]
+const {TextArea} = Input
 
 function FormComp(props) {
 
@@ -28,7 +21,8 @@ function FormComp(props) {
     modalType,
     onCancelClick,
     submitForm,
-    item
+    item,
+    classList
   } = props
 
 
@@ -91,7 +85,7 @@ function FormComp(props) {
           name="title"
           rules={[{ required: true, message: '标题' }]}
         >
-          <Input />
+          <TextArea rows={4} />
         </Form.Item>
         <Form.Item
           label="技术类型"
@@ -114,7 +108,7 @@ function FormComp(props) {
         >
           <Select allowClear>
             {
-              classList.map(v => <Option value={v}>{v}</Option>)
+              classList.map(v => <Option key={v.id} value={v.name}>{v.name}</Option>)
             }
           </Select>
         </Form.Item>

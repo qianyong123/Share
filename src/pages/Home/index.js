@@ -6,72 +6,57 @@ import {
 } from "react-router-dom";
 import { Row, Col, Pagination } from 'antd';
 import ListItem from '@/components/ListItem'
-import
-DataList,
-{
-  HtmlCssList,
-  JsList,
-  ReactList,
-  VueList,
-  RestList
-}
-  from '@/md'
+import fetching from '@/util/fetching'
 
-  const { xs, sm, md, lg, xl, xxl } = {
-    xs: { span: 24, offset: 0 }, //<576px
-    sm: { span: 12, offset: 0 }, //≥576px
-    md: { span: 12, offset: 0 }, //≥768
-    lg: { span: 8, offset: 0 }, //≥992px
-    xl: { span: 6, offset: 0 }, //≥1200px
-    xxl: { span: 6, offset: 0 }, //≥1600px
-  }
+const { xs, sm, md, lg, xl, xxl } = {
+  xs: { span: 24, offset: 0 }, //<576px
+  sm: { span: 12, offset: 0 }, //≥576px
+  md: { span: 12, offset: 0 }, //≥768
+  lg: { span: 8, offset: 0 }, //≥992px
+  xl: { span: 6, offset: 0 }, //≥1200px
+  xxl: { span: 6, offset: 0 }, //≥1600px
+}
 const Index = () => {
- 
+
   const [List, SetList] = useState([])
   const [pageNumber, setpageNumber] = useState(1)
   const [pageSize, setpageSize] = useState(10)
+  const [total, setTotal] = useState(0)
 
 
   const location = useLocation()
+  const path = location.pathname === '/' || location.pathname === '/Home' ? '' : location.pathname.replace('/', '')
 
   useEffect(() => {
-    let DataList2 = []
-    switch (location.pathname) {
-      case '/JavaScript':
-        DataList2 = JsList;
-        break;
-      case '/HtmlCss':
-        DataList2 = HtmlCssList;
-        break;
-      case '/Vue':
-        DataList2 = VueList;
-        break;
-      case '/React':
-        DataList2 = ReactList;
-        break;
-      case '/Rest':
-        DataList2 = RestList;
-        break;
-      default:
-        DataList2 = DataList
-    }
-    DataList2 = DataList2.sort((a, b) => {
-      return a.time < b.time ? 1 : -1
-    })
-    SetList(DataList2)
+    fetchList(1, 10)
   }, [location])
 
+  function onChange(number, Size) {
+    console.log('Page: ', number, Size);
+    setpageNumber(number)
+    setpageSize(Size)
+    fetchList(number, Size)
+  }
 
-  // console.log(location.pathname)
-  function onChange(pageNumber,pageSize) {
-    console.log('Page: ', pageNumber,pageSize);
-    setpageNumber(pageNumber)
-    setpageSize(pageSize)
+  const fetchList = (number, Size) => {
+    fetching('/api/admin/query', {
+      data: {
+        classify: path,
+        pageNumber: number,
+        pageSize: Size
+      }
+    })
+      .then(res => {
+        if (res && res.data) {
+          SetList(res.data)
+          setTotal(res.total)
+        }
+      })
   }
 
   return (
     <div className="home">
-      <Row>
+      <Row className="rowList">
         {
           List.length < 1
             ?
@@ -86,14 +71,18 @@ const Index = () => {
             })
         }
       </Row>
-      <Pagination
-        style={{ padding:"40px 20px",}}
-        current={pageNumber}
-        pageSize={pageSize}
-        total={50}
-        showSizeChanger
-        onChange={onChange}
-      />
+      {
+        total > 10 &&
+        <Pagination
+          style={{ padding: "40px 20px", }}
+          current={pageNumber}
+          pageSize={pageSize}
+          total={total}
+          showSizeChanger
+          onChange={onChange}
+        />
+      }
+
     </div>
   );
 }

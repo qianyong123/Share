@@ -1,6 +1,6 @@
 
 var express = require('express');
-var dbAction = require('../common/basicConnection');
+var dbAction = require('../common/admin');
 var bodyParser = require('body-parser');//解析,用req.body获取post参数
 var router = express.Router();
 
@@ -8,18 +8,24 @@ var router = express.Router();
 var jsonParser = bodyParser.json()
 
 /* GET users listing. */
-router.post('/query',jsonParser, function(req, res, next) {
-    dbAction.queryAll(req, res, next)
-});
 
 router.get('/query', function(req, res, next) {
-   
     dbAction.queryAll(req, res, next)
 });
 
 router.post('/add', jsonParser,function(req, res, next) {
    
     dbAction.add(req, res, next)
+});
+
+router.get('/detail',function(req, res, next) {
+   
+    dbAction.getDetail(req, res, next)
+});
+
+router.get('/ClassifyList',function(req, res, next) {
+   
+    dbAction.ClassifyList(req, res, next)
 });
 
 module.exports = router;

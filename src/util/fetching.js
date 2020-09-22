@@ -1,18 +1,16 @@
 
 import {message} from 'antd'
 
-function fetching(
-  url,
-  {
-    method="POST",
+function fetching(url,item={}) {
+
+  const {
+    method="GET",
     body={},
     data={},
     headers={}
-  }
-  
-) {
+  } = item
   const pramas = {
-    method
+    method, 
   }
 
   if (method === 'POST') {
@@ -24,7 +22,9 @@ function fetching(
   } else if(method === 'GET'){
     let dataStr = ''; //数据拼接字符串
     Object.keys(data).forEach(key => {
+      if(data[key]){
         dataStr += key + '=' + data[key] + '&';
+      }
     })
 
     if (dataStr !== '') {
@@ -41,12 +41,11 @@ function fetching(
   return fetch(url, pramas)
     .then(response => response.json())
     .then(res => {
-
       if(res && res.code !== 200){
         message.error(JSON.stringify(res.msg) || '服务器错误')
-        return false
+        return {}
       }
-      return res
+      return res || {}
     })
     .catch((err) => {
       console.log('err', err)
