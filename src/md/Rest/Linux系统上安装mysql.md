@@ -183,7 +183,7 @@ kill -9 PID
 ```
 [root@localhost /]#  mysql -u root -p
 Enter password:
-mysql>set password for root@localhost = password('yourpass');
+mysql>set password for root@localhost = password('youpass');
 
 ```
 

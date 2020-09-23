@@ -72,7 +72,7 @@ const Index = () => {
       <div className="detail">
         <article>
           {/* <div dangerouslySetInnerHTML={{ __html: obj.text }}></div> */}
-          <Markdown md={obj.text} />
+          <Markdown md={obj.text} classify={obj.classify} />
         </article>
       </div>
     </div>

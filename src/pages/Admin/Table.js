@@ -1,22 +1,13 @@
 import React from 'react'
-import { Table, Icon, Dropdown, Menu, Button, Tooltip } from 'antd';
+import { Table, Icon, Dropdown, Menu, Button, Tooltip, Typography } from 'antd';
 import {
   DownOutlined,
   EditOutlined,
   DeleteOutlined
 } from '@ant-design/icons';
+import './index.less'
 
-// const data = [];
-// for (let i = 0; i < 100; i++) {
-//   data.push({
-//     key: i,
-//     title: `EdrwardLondon Park no.London Park no.London Park no.London Park no.London Park no.London Park no.London Park no.London Park no.London Park no.London Park no.London Park no.London Park no.London Park no.London Park no.London Park no. ${i}`,
-//     age: 32,
-//     address: `London Park no. ${i}`,
-//   });
-// }
-
-//   scroll={{ x: 'max-content' }}
+const { Paragraph } = Typography;
 function TableList(props) {
 
   const {
@@ -24,13 +15,14 @@ function TableList(props) {
     onEdit,
     onDelete,
     data,
-    total
-  } = props
-  
-  const pagination= {
     total,
-    showSizeChanger:true,
-    onChange:onChange
+    loadingList = false
+  } = props
+
+  const pagination = {
+    total,
+    showSizeChanger: true,
+    onChange: onChange
   }
   const columns = [
     {
@@ -52,9 +44,10 @@ function TableList(props) {
       ellipsis: {
         showTitle: false,
       },
-      render: address => (
-        <Tooltip placement="topLeft" title={address}>
-          {address}
+      render: title => (
+        <Tooltip placement="topLeft" title={title}>
+          {title}
+          {/* <Paragraph style={{ width: 150,}} ellipsis>{title}</Paragraph> */}
         </Tooltip>
       ),
     },
@@ -70,14 +63,14 @@ function TableList(props) {
       key: 'classify',
       align: 'center',
     },
-  
+
     {
       title: '创建时间',
       dataIndex: 'time',
       key: 'time',
       align: 'center',
       render: text => (
-        <div>{ text}</div>
+        <div>{text}</div>
       ),
     },
     {
@@ -92,11 +85,11 @@ function TableList(props) {
           overlay={
             <Menu>
 
-              <Menu.Item onClick={() => onEdit(record)}>
+              <Menu.Item onClick={() => onEdit(record.id)}>
                 <EditOutlined style={{ color: ' #eb5055' }} />
                   编辑
                 </Menu.Item>
-              <Menu.Item onClick={() => onDelete(record)}>
+              <Menu.Item onClick={() => onDelete(record.id)}>
                 <DeleteOutlined style={{ color: ' #eb5055' }} />
                   删除
                 </Menu.Item>
@@ -118,9 +111,12 @@ function TableList(props) {
       columns={columns}
       dataSource={data}
       rowKey="id"
-      // scroll={{ x: 'max-content', y: 400 }}
+      // scroll={{ x: 'max-content' }}
+       scroll={{ x: 800 }}
+
       size="middle"
       pagination={pagination}
+      loading={loadingList}
     />
   )
 }

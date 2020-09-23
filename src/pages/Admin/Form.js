@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react'
+import React, { PureComponent,useEffect } from 'react'
 import {
   Button,
   Form,
@@ -7,6 +7,7 @@ import {
   DatePicker,
   Select
 } from 'antd'
+import moment from 'moment'
 import UploadFile from '../../components/UploadFile'
 
 const { Option } = Select;
@@ -25,6 +26,13 @@ function FormComp(props) {
     classList
   } = props
 
+  useEffect(()=>{
+    form.setFieldsValue({
+      ...item,
+      time:moment(item.time || undefined)
+    })
+
+  },[item])
 
   const layout = {
     labelCol: { span: 8 },
@@ -32,16 +40,15 @@ function FormComp(props) {
   }
 
   const initialValues = {
-    ...item
+    ...item,
+    time:moment(item.time || undefined)
   }
 
   const handSubmit = async () => {
-    const mdUrl = `@/md/`
     try {
       const values = await form.validateFields();
       values.time = values.time ? values.time.format('YYYY-MM-DD') : '';
-      values.text = `${mdUrl}${values.classify}/${values.text}`
-      submitForm(values,()=>{
+      submitForm(({...item,...values}),()=>{
         form.resetFields()
       })
       console.log('Success:', values);

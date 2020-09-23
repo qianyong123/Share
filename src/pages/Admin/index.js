@@ -27,7 +27,8 @@ class IndexClassification extends Component {
     filterFormValues: {},
     data: [],
     total: 0,
-    classList: []
+    classList: [],
+    loadingList:false
   }
 
 
@@ -110,9 +111,11 @@ class IndexClassification extends Component {
 
   // 提交
   handleFormSubmit = (values, callback) => {
-    fetching('/api/admin/add', { method: 'POST', body: values })
+    const {modal:{modalType}} = this.state
+    const url = modalType === 'new' ? '/api/admin/add': `/api/admin/update`
+    fetching(url, { method: 'POST', body: values })
       .then(res => {
-        if (res) {
+        if (res && res.code === 200) {
           if (callback) callback()
           this.handleModalVisible(false)
           message.success('操作成功')
@@ -126,18 +129,17 @@ class IndexClassification extends Component {
 
   // 编辑
   handEdit = async (id) => {
-    // fetching('/api/admin/detail', { data: { id } })
-    //   .then(res => {
-    //     if (res.data) {
-    //       setObj(res.data[0])
-    //     }
-    //   })
-    this.handleModalVisible(true, 'edit', {})
+    fetching('/api/admin/detail', { data: { id } })
+      .then(res => {
+        if (res.data) {
+          this.handleModalVisible(true,'edit',res.data[0])
+        }
+      })
   }
 
   handleDelete = id => {
     const self = this
-    const { dispatch } = this.props
+
     Modal.confirm({
       title: '确定要删除这个数据吗？',
       content: '删除后，无法恢复。',
@@ -145,19 +147,13 @@ class IndexClassification extends Component {
       okText: '删除',
       cancelText: '取消',
       onOk() {
-        // dispatch({
-        //   type: 'evaluationSystemFillForm/remove',
-        //   payload: {
-        //     id,
-        //   },
-        //   callback: () => {
-        //     message.success('删除成功')
-        //     self.setState({
-        //       selectedRows: [],
-        //     })
-        //     self.handleSearch()
-        //   },
-        // })
+        fetching('/api/admin/deleteData', { data: { id } })
+        .then(res => {
+          if (res.data) {
+            message.success('删除成功')
+            self.handleSearch()
+          }
+        })
       },
     })
   }

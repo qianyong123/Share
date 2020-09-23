@@ -4,12 +4,12 @@ import ReactMarkdown from 'react-markdown/with-html'
 import CodeBlock from './CodeBlock'
 // import {  linuxNodeJs,GitOrder,CssCenter } from '@/md'
 
-const Index = ({ md }) => {
+const Index = ({ md,classify }) => {
   const [value, setValue] = useState()
   useEffect(() => {
-    console.log(md)
+    console.log(classify,md)
     if (md) {
-      const url = require(`@/md/${md}`)
+      const url = require(`@/md/${classify}/${md}`)
       fetch(url)
         .then(res => res.text())
         .then(text => {

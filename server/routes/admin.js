@@ -10,6 +10,7 @@ var jsonParser = bodyParser.json()
 /* GET users listing. */
 
 router.get('/query', function(req, res, next) {
+    console.log(req.query)
     dbAction.queryAll(req, res, next)
 });
 
@@ -18,10 +19,21 @@ router.post('/add', jsonParser,function(req, res, next) {
     dbAction.add(req, res, next)
 });
 
+router.post('/update', jsonParser,function(req, res, next) {
+   
+    dbAction.update(req, res, next)
+});
+
 router.get('/detail',function(req, res, next) {
    
     dbAction.getDetail(req, res, next)
 });
+
+router.get('/deleteData',function(req, res, next) {
+   
+    dbAction.deleteData(req, res, next)
+});
+
 
 router.get('/ClassifyList',function(req, res, next) {
    

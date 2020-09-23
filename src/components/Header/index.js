@@ -15,7 +15,7 @@ const styles = { fontSize: '16px', fontWeight: '400' }
 function Index() {
   const [iswidth, setIsWidth] = useState(true)
   const [navs, setNavs] = useState([])
-  const [pathname, setPathname] = useState('/')
+  const [pathname, setPathname] = useState('/Home')
   const path = useLocation().pathname
   const refPath = useRef()
 
@@ -44,17 +44,29 @@ function Index() {
     }
   })
 
+  if (path === '/error' || path === '/admin') {
+    return null
+  }
 
   return (
-    path !== '/error' &&
     <Header className="headersBox">
       <div className="headers">
         <h2>Share</h2>
-        <div>
-          {
-            iswidth
-              ?
-              <Menu selectedKeys={[pathname === '/' ? '/Home' : pathname]} mode="horizontal">
+        {
+          iswidth
+            ?
+            <Menu selectedKeys={[pathname === '/' ? '/Home' : pathname]} mode="horizontal">
+              {navs.map(item => {
+                return (
+                  <Menu.Item key={item.path}>
+                    <Link style={styles} to={item.path}>{item.name}</Link>
+                  </Menu.Item>
+                )
+              })}
+            </Menu>
+            :
+            <Menu selectedKeys={[pathname === '/' ? '/Home' : pathname]}>
+              <SubMenu icon={<UnorderedListOutlined style={{ fontSize: "20px" }} />}>
                 {navs.map(item => {
                   return (
                     <Menu.Item key={item.path}>
@@ -62,23 +74,9 @@ function Index() {
                     </Menu.Item>
                   )
                 })}
-              </Menu>
-              :
-
-              <Menu selectedKeys={[pathname === '/' ? '/Home' : pathname]}>
-
-                <SubMenu icon={<UnorderedListOutlined style={{ fontSize: "20px" }} />}>
-                  {navs.map(item => {
-                    return (
-                      <Menu.Item key={item.path}>
-                        <Link style={styles} to={item.path}>{item.name}</Link>
-                      </Menu.Item>
-                    )
-                  })}
-                </SubMenu>
-              </Menu>
-          }
-        </div>
+              </SubMenu>
+            </Menu>
+        }
       </div>
     </Header>
   );
