@@ -15,8 +15,11 @@ const Index = () => {
   const [obj, setObj] = useState({})
 
   let Params = useLocation();
-  let ids = Params.search.indexOf('?id')
-  let id = Params.search.slice(ids).split('=')[1]
+  const useParams2 = useParams();
+  const id = useParams2.id
+  console.log(useParams2)
+  // let ids = Params.search.indexOf('?id')
+  // let id = Params.search.slice(ids).split('=')[1]
 
   const numbers = parseInt(Math.random() * 9) + 1
 
@@ -29,7 +32,7 @@ const Index = () => {
 
  
   // console.log(Params,ids)
-  if(ids === -1){
+  if(!id){
     return <h3 style={{padding:50,textAlign:'center'}}>暂无数据</h3>
   }
 
