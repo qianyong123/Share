@@ -7,10 +7,17 @@ var dbConfig = require('../config/mysql');
 var pool = mysql.createPool(dbConfig);
 
 function connectionQuery(sql, callback) {
-    pool.getConnection(function (err, connection) {
 
-        connection.query(sql, (err2, rows) => callback(err2, rows, connection))
-    })
+    try {
+        pool.getConnection(function (err, connection) {
+
+            connection.query(sql, (err2, rows) => callback(err2, rows, connection))
+        })
+    } catch (err) {
+        console.error(err);
+        res.end(`<pre> ${err} </pre>`)
+    }
+
 }
 
 /**
@@ -18,12 +25,14 @@ function connectionQuery(sql, callback) {
  */
 function responseDoReturn(res, result, err) {
     if (typeof result === 'undefined') {
-        console.log('err', err)
+        console.error(err);
         res.json({
             code: 201,
             msg: err
         });
     } else {
+        console.log('result', result)
+
         res.json({
             code: 200,
             data: result
@@ -34,7 +43,7 @@ function responseDoReturn(res, result, err) {
 // 查询分页，总条数
 function responsePage(res, result, total, err) {
     if (typeof result === 'undefined') {
-        console.log('err', err)
+        console.error(err);
         res.json({
             code: 201,
             msg: err
@@ -127,24 +136,21 @@ function homeQuery(req, res, next) {
 function add(req, res, next) {
     const { text, type, classify, title, time } = req.body
     const sql = `INSERT INTO article_list VALUES (${null},'${text}','${type}','${classify}','${title}','${time}')`
-    pool.getConnection(function (err, connection) {
-        connection.query(sql, function (err2, rows) {
-            responseDoReturn(res, rows, err2);
-            // 释放数据库连接
-            connection.release();
-        })
+    connectionQuery(sql, function (err, rows, connection) {
+        responseDoReturn(res, rows, err2);
+        // 释放数据库连接
+        connection.release();
     })
+
 }
 
 function update(req, res, next) {
-    const { text, type, classify, title, time,id } = req.body
+    const { text, type, classify, title, time, id } = req.body
     const sql = `UPDATE article_list SET text='${text}',type='${type}',classify='${classify}',title='${title}',time='${time}' WHERE id=${Number(id)}`
-    pool.getConnection(function (err, connection) {
-        connection.query(sql, function (err2, rows) {
-            responseDoReturn(res, rows, err2);
-            // 释放数据库连接
-            connection.release();
-        })
+    connectionQuery(sql, function (err, rows, connection) {
+        responseDoReturn(res, rows, err);
+        // 释放数据库连接
+        connection.release();
     })
 }
 
@@ -152,36 +158,31 @@ function update(req, res, next) {
 function getDetail(req, res, next) {
     const { id } = req.query
     const sql = `SELECT type,text,classify,title,id,DATE_FORMAT(time,'%Y-%m-%d') time  FROM article_list WHERE id=${Number(id)}`
-    pool.getConnection(function (err, connection) {
-        connection.query(sql, function (err2, rows) {
-            responseDoReturn(res, rows, err2);
-            // 释放数据库连接
-            connection.release();
-        })
+    connectionQuery(sql, function (err, rows, connection) {
+        responseDoReturn(res, rows, err);
+        // 释放数据库连接
+        connection.release();
     })
+
 }
 
 function deleteData(req, res, next) {
     const { id } = req.query
     const sql = `DELETE FROM article_list WHERE id=${Number(id)}`
-    pool.getConnection(function (err, connection) {
-        connection.query(sql, function (err2, rows) {
-            responseDoReturn(res, rows, err2);
-            // 释放数据库连接
-            connection.release();
-        })
+    connectionQuery(sql, function (err, rows, connection) {
+        responseDoReturn(res, rows, err);
+        // 释放数据库连接
+        connection.release();
     })
 }
 
 
 function ClassifyList(req, res, next) {
     const sql = `SELECT * FROM classify`
-    pool.getConnection(function (err, connection) {
-        connection.query(sql, function (err2, rows) {
-            responseDoReturn(res, rows, err2);
-            // 释放数据库连接
-            connection.release();
-        })
+    connectionQuery(sql, function (err, rows, connection) {
+        responseDoReturn(res, rows, err);
+        // 释放数据库连接
+        connection.release();
     })
 }
 

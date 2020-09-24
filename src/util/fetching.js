@@ -1,16 +1,16 @@
 
-import {message} from 'antd'
+import { message } from 'antd'
 
-function fetching(url,item={}) {
+async function fetching (url, item = {}) {
 
   const {
-    method="GET",
-    body={},
-    data={},
-    headers={}
+    method = "GET",
+    body = {},
+    data = {},
+    headers = {}
   } = item
   const pramas = {
-    method, 
+    method,
   }
 
   if (method === 'POST') {
@@ -19,37 +19,37 @@ function fetching(url,item={}) {
       ...headers,
       'Content-Type': 'application/json'
     }
-  } else if(method === 'GET'){
+  } else if (method === 'GET') {
     let dataStr = ''; //数据拼接字符串
     Object.keys(data).forEach(key => {
-      if(data[key]){
+      if (data[key]) {
         dataStr += key + '=' + data[key] + '&';
       }
     })
 
     if (dataStr !== '') {
-        dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
-        url = url + '?' + dataStr;
+      dataStr = dataStr.substr(0, dataStr.lastIndexOf('&'));
+      url = url + '?' + dataStr;
     }
     pramas.headers = {
       ...headers,
     }
   }
 
-
-
+  
   return fetch(url, pramas)
-    .then(response => response.json())
-    .then(res => {
-      if(res && res.code !== 200){
-        message.error(JSON.stringify(res.msg) || '服务器错误')
-        return {}
-      }
-      return res || {}
-    })
-    .catch((err) => {
-      console.log('err', err)
-    })
+      .then(response => response.json())
+      .then(res => {
+        if (res && res.code !== 200) {
+          message.error(JSON.stringify(res.msg) || '服务器错误')
+        }
+        return res
+      })
+      .catch((err) => {
+        console.log('err', err)
+      })
+   
+
 }
 
 export default fetching
