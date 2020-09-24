@@ -24,6 +24,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+//配置任何请求都转到index.html，而index.html会根据React-Router规则去匹配任何一个route
+app.get('*', function (request, response){
+  response.sendFile(path.resolve(__dirname, 'dist', 'index.html'))
+})
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
