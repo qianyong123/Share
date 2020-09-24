@@ -46,7 +46,8 @@ module.exports = {
       //1.修改、添加loader 配置 :
       // 所有的loaders规则是在config.module.rules(数组)的第二项
       // 即：config.module.rules[2].oneof  (如果不是，具体可以打印 一下是第几项目)
-     
+
+    
       const loaders = config.module.rules.find(rule => Array.isArray(rule.oneOf)).oneOf;
       // console.log(loaders)
       // 添加插件
@@ -62,7 +63,11 @@ module.exports = {
     //     }
     // })
    
-       
+      // 修改打包地址
+      const paths = require("react-scripts/config/paths");
+      paths.appBuild = path.join(path.dirname(paths.appBuild), "/server/public");
+      config.output.path = path.join(path.dirname(config.output.path), '/server/public');
+
       return config
     }
   )
