@@ -15,11 +15,10 @@ const Index = () => {
   const [obj, setObj] = useState({})
 
   let Params = useLocation();
-  const useParams2 = useParams();
-  const id = useParams2.id
-  console.log(useParams2)
-  // let ids = Params.search.indexOf('?id')
-  // let id = Params.search.slice(ids).split('=')[1]
+  const {search,state={}} = Params
+   let ids = search.indexOf('?id')
+  let urlId = search.slice(ids).split('=')[1]
+  const id = state.id || urlId
 
   const numbers = parseInt(Math.random() * 9) + 1
 
@@ -41,13 +40,20 @@ const Index = () => {
   // const obj = DataList.find(i => i.id === id)
 
   const getDetail = () => {
+    try{
+      fetching('/api/admin/detail',{data:{id}})
+      .then(res => {
+        if(res.data){
+          setObj(res.data[0])
+        }
+      })
+      .catch((err)=>{
+        console.log('err222rte',err)
+      })
+    }catch(err){
+      console.log('err222',err)
+    }
   
-    fetching('/api/admin/detail',{data:{id}})
-    .then(res => {
-      if(res.data){
-        setObj(res.data[0])
-      }
-    })
   }
 
   return (

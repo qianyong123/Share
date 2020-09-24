@@ -72,7 +72,7 @@ const Error = loadable(() => import('./pages/Error'))
     component:<Home />,
   },
   {
-    path: '/Detail/:id',
+    path: '/Detail',
     name: 'detail',
     hide:true,
     component:<Detail />,
