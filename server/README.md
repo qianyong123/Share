@@ -32,3 +32,23 @@ req.body
 req.query
 
 ```
+
+# forever 
+```
+//显示所有运行的服务
+forever list
+
+// 1. 停止所有运行的node App
+forever stopall
+
+// 2. 停止其中一个node App
+forever stop app.js
+// 当然还可以这样
+// forever list 找到对应的id，然后：
+forever stop [id]
+
+// 启动一个服务
+forever start app.js
+// 1. 启动所有
+forever restartall
+```
