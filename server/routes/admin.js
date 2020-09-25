@@ -9,36 +9,21 @@ var jsonParser = bodyParser.json()
 
 /* GET users listing. */
 
-router.get('/query', function(req, res, next) {
-    console.log(req.query)
-    dbAction.queryAll(req, res, next)
-});
+const callback = function(req, res, next,fun) {
+    console.log(req.url)
+    dbAction[fun](req, res, next)
+     // 响应超时处理
+     res.setTimeout(8000, function() {
+        res.json({ msg: "请求超时" });
+    });
+}
 
-router.post('/add', jsonParser,function(req, res, next) {
-   
-    dbAction.add(req, res, next)
-});
-
-router.post('/update', jsonParser,function(req, res, next) {
-   
-    dbAction.update(req, res, next)
-});
-
-router.get('/detail',function(req, res, next) {
-   
-    dbAction.getDetail(req, res, next)
-});
-
-router.get('/deleteData',function(req, res, next) {
-   
-    dbAction.deleteData(req, res, next)
-});
-
-
-router.get('/ClassifyList',function(req, res, next) {
-   
-    dbAction.ClassifyList(req, res, next)
-});
+router.get('/query',(req, res, next)=> callback(req, res, next,'queryAll'));
+router.post('/add',jsonParser,(req, res, next)=> callback(req, res, next,'add'));
+router.post('/update',jsonParser,(req, res, next)=> callback(req, res, next,'update'));
+router.get('/detail',(req, res, next)=> callback(req, res, next,'getDetail'));
+router.get('/deleteData',(req, res, next)=> callback(req, res, next,'deleteData'));
+router.get('/ClassifyList',(req, res, next)=> callback(req, res, next,'ClassifyList'));
 
 module.exports = router;
 

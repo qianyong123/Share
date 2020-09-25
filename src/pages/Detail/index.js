@@ -43,7 +43,7 @@ const Index = () => {
     try{
       fetching('/api/admin/detail',{data:{id}})
       .then(res => {
-        if(res.data){
+        if(res && res.code === 200){
           setObj(res.data[0])
         }
       })

@@ -38,7 +38,7 @@ module.exports = {
       echarts: "window.echarts",
       // highcharts:"window.highcharts"
     }),
-    (config, env) => { //暴露webpack的配置 config ,evn
+    (config) => { //暴露webpack的配置 config ,evn
       // 去掉打包生产map 文件
       // config.devtool = config.mode === 'development' ? 'cheap-module-source-map' : false;
       if (process.env.NODE_ENV === "production") config.devtool = false;
@@ -62,11 +62,10 @@ module.exports = {
       //       resources: path.resolve(__dirname, 'src/asset/base.scss')//全局引入公共的scss 文件
       //     }
       // })
-
       // 修改打包地址
-      if (env === 'development') {
+      if (process.env.NODE_ENV === 'development') {
         console.log('evn is development, skip build path change...')
-      } else if (env === 'production') {
+      } else if (process.env.NODE_ENV === 'production') {
         console.log('evn is production, change build path...')
         // 修改path目录
         const paths = require('react-scripts/config/paths');

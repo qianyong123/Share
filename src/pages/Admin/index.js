@@ -58,7 +58,7 @@ class IndexClassification extends Component {
     this.setState(() => ({
       [`${modalTarget}`]: {
         modalVisible: modalVisible || false,
-        modalType: modalType || 'new',
+        modalType: modalType || '',
         item: item || {},
       },
     }))
@@ -83,10 +83,15 @@ class IndexClassification extends Component {
 
   requestList = (params) => {
     const { filterFormValues } = this.state
+    const data = {
+      pageNumber:1,
+      pageSize:10,
+      ...(params || filterFormValues)
+    }
     let that = this
-    fetching('/api/admin/query', { data: params || filterFormValues })
+    fetching('/api/admin/query', { data})
       .then(res => {
-        if (res) {
+        if (res && res.code === 200) {
           that.setState({
             data: res.data,
             total: res.total
@@ -100,7 +105,7 @@ class IndexClassification extends Component {
     let that = this
     fetching('/api/admin/ClassifyList')
       .then(res => {
-        if (res) {
+        if (res && res.code === 200) {
           that.setState({ classList: res.data })
         }
       })
@@ -110,13 +115,12 @@ class IndexClassification extends Component {
 
 
   // 提交
-  handleFormSubmit = (values, callback) => {
+  handleFormSubmit = (values) => {
     const {modal:{modalType}} = this.state
     const url = modalType === 'new' ? '/api/admin/add': `/api/admin/update`
     fetching(url, { method: 'POST', body: values })
       .then(res => {
         if (res && res.code === 200) {
-          if (callback) callback()
           this.handleModalVisible(false)
           message.success('操作成功')
           this.requestList()
@@ -131,7 +135,7 @@ class IndexClassification extends Component {
   handEdit = async (id) => {
     fetching('/api/admin/detail', { data: { id } })
       .then(res => {
-        if (res.data) {
+        if (res && res.data) {
           this.handleModalVisible(true,'edit',res.data[0])
         }
       })
@@ -189,7 +193,7 @@ class IndexClassification extends Component {
               <span>共有<b>{total}</b>条信息</span>
               <Button
                 icon={<PlusOutlined />}
-                onClick={() => this.handleModalVisible(true)}
+                onClick={() => this.handleModalVisible(true,'new',{})}
                 style={{ background: '#ee9800', color: '#fff', float: 'right', marginBottom: 20 }}
               >
                 添加
