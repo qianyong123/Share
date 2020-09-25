@@ -41,7 +41,7 @@ async function fetching (url, item = {}) {
       .then(response => response.json())
       .then(res => {
         if (res && res.code !== 200) {
-          message.error(JSON.stringify(res.msg) || '服务器错误')
+          message.error(res.msg || '服务器错误')
         }
         return res
       })

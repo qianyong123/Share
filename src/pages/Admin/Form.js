@@ -1,4 +1,4 @@
-import React, { PureComponent,useEffect } from 'react'
+import React, { PureComponent, useEffect } from 'react'
 import {
   Button,
   Form,
@@ -11,7 +11,7 @@ import moment from 'moment'
 import UploadFile from '../../components/UploadFile'
 
 const { Option } = Select;
-const {TextArea} = Input
+const { TextArea } = Input
 
 function FormComp(props) {
 
@@ -26,13 +26,15 @@ function FormComp(props) {
     classList
   } = props
 
-  useEffect(()=>{
-    form.setFieldsValue({
-      ...item,
-      time:moment(item.time || undefined)
-    })
-
-  },[item])
+  useEffect(() => {
+    form.resetFields()
+    if (modalType === 'edit') {
+      form.setFieldsValue({
+        ...item,
+        time: moment(item.time || undefined)
+      })
+    }
+  }, [modalType])
 
   const layout = {
     labelCol: { span: 8 },
@@ -41,24 +43,22 @@ function FormComp(props) {
 
   const initialValues = {
     ...item,
-    time:moment(item.time || undefined)
+    time: moment(item.time || undefined)
   }
+
 
   const handSubmit = async () => {
     try {
       const values = await form.validateFields();
       values.time = values.time ? values.time.format('YYYY-MM-DD') : '';
-      submitForm(({...item,...values}),()=>{
-        form.resetFields()
-      })
+      submitForm(({ ...item, ...values }))
       console.log('Success:', values);
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
   };
 
-  const cancel = ()=> {
-    form.resetFields()
+  const cancel = () => {
     onCancelClick()
   }
 
@@ -76,7 +76,7 @@ function FormComp(props) {
       }
       title={title}
       visible={modalVisible}
-      onCancel={onCancelClick}
+      onCancel={cancel}
       maskClosable={false}
       width="500px"
     >
@@ -106,7 +106,7 @@ function FormComp(props) {
           name="time"
           rules={[{ required: true, message: '创建时间' }]}
         >
-          <DatePicker style={{width:'100%'}} format="YYYY-MM-DD" />
+          <DatePicker style={{ width: '100%' }} format="YYYY-MM-DD" />
         </Form.Item>
         <Form.Item
           label="技术分类"
