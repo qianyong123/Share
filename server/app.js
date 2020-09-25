@@ -38,6 +38,13 @@ app.get('*', function (request, response){
   response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
 })
 
+app.use(express.static(__dirname + '/public'))
+
+//配置任何请求都转到index.html，而index.html会根据React-Router规则去匹配任何一个route
+app.get('*', function (request, response){
+  response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+})
+
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -46,7 +53,6 @@ app.use('/users', usersRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
-
 
 
 
