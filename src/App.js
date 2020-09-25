@@ -10,7 +10,7 @@ import './App.less';
 import fetching from './util/fetching'
 import router from './router'
 import Headers from '@/components/Header'
-// import Footers from '@/components/Footer'
+import Footers from '@/components/Footer'
 
 
 
@@ -41,9 +41,9 @@ class App extends React.Component {
               <Redirect form="*" to="/error" />
             </Switch>
           </Content>
-          {/* <Footer>
+          <Footer>
             <Footers />
-          </Footer> */}
+          </Footer>
         </Layout>
 
       </Router>
