@@ -15,6 +15,8 @@ var login = true
 //   next()
 // })
 
+
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -28,8 +30,13 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(express.static(__dirname + '/public'))
+
+//配置任何请求都转到index.html，而index.html会根据React-Router规则去匹配任何一个route
+app.get('*', function (request, response){
+  response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
+})
 
 
 app.use('/', indexRouter);
@@ -41,10 +48,6 @@ app.use(function(req, res, next) {
 });
 
 
-//配置任何请求都转到index.html，而index.html会根据React-Router规则去匹配任何一个route
-app.get('*', function (request, response){
-  response.sendFile(path.resolve(__dirname, 'public', 'index.html'))
-})
 
 
 // error handler
