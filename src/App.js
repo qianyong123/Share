@@ -19,7 +19,7 @@ const { Footer, Content } = Layout;
 class App extends React.Component {
 
   componentDidMount() {
-
+      console.log('首次渲染')
   }
 
   render() {

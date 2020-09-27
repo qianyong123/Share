@@ -40,9 +40,20 @@ module.exports = {
     }),
     (config) => { //暴露webpack的配置 config ,evn
       // 去掉打包生产map 文件
-      // config.devtool = config.mode === 'development' ? 'cheap-module-source-map' : false;
-      if (process.env.NODE_ENV === "production") config.devtool = false;
+      config.devtool = config.mode === 'development' ? 'cheap-module-source-map' : false;
       if (process.env.NODE_ENV !== "development") config.plugins = [...config.plugins, ...myPlugin]
+      // 修改打包地址
+      if (process.env.NODE_ENV === 'development') {
+        console.log('evn is development, skip build path change...')
+      } else if (process.env.NODE_ENV === 'production') {
+        console.log('evn is production, change build path...')
+        config.devtool = false;
+        // 修改path目录
+        const paths = require('react-scripts/config/paths');
+        paths.appBuild = path.join(path.dirname(paths.appBuild), '/server/public');
+        config.output.path = path.join(path.dirname(config.output.path), '/server/public');
+      }
+
       //1.修改、添加loader 配置 :
       // 所有的loaders规则是在config.module.rules(数组)的第二项
       // 即：config.module.rules[2].oneof  (如果不是，具体可以打印 一下是第几项目)
@@ -62,16 +73,7 @@ module.exports = {
       //       resources: path.resolve(__dirname, 'src/asset/base.scss')//全局引入公共的scss 文件
       //     }
       // })
-      // 修改打包地址
-      if (process.env.NODE_ENV === 'development') {
-        console.log('evn is development, skip build path change...')
-      } else if (process.env.NODE_ENV === 'production') {
-        console.log('evn is production, change build path...')
-        // 修改path目录
-        const paths = require('react-scripts/config/paths');
-        paths.appBuild = path.join(path.dirname(paths.appBuild), '/server/public');
-        config.output.path = path.join(path.dirname(config.output.path), '/server/public');
-      }
+
 
       return config
     }

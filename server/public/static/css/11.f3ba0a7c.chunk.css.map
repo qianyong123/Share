@@ -1,1 +1,0 @@
-{"version":3,"sources":["index.less"],"names":[],"mappings":"AAEA,MACE,WADF","file":"11.f3ba0a7c.chunk.css","sourcesContent":["\n\n.rows{\n  width: 150px;\n  // overflow: hidden;\n  // overflow-wrap: normal;\n  // white-space: nowrap;\n}\n\n@primary-color: #eb5055;"]}
