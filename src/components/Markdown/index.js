@@ -7,9 +7,10 @@ import CodeBlock from './CodeBlock'
 const Index = ({ md,classify }) => {
   const [value, setValue] = useState()
   useEffect(() => {
-    console.log(classify,md)
     if (md) {
-      const url = require(`@/md/${classify}/${md}`)
+      // const url = require(`@/md/${classify}/${md}`)
+      const url = require(`../../../server/${md}`)
+
       fetch(url)
         .then(res => res.text())
         .then(text => {
@@ -22,7 +23,7 @@ const Index = ({ md,classify }) => {
   return (
     <ReactMarkdown
       source={value}
-      // escapeHtml={false}
+      escapeHtml={false}
       renderers={{
         code: CodeBlock,
         // // heading: HeadingBlock

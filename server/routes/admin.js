@@ -4,6 +4,9 @@ var dbAction = require('../common/admin');
 var bodyParser = require('body-parser');//解析,用req.body获取post参数
 var router = express.Router();
 
+
+
+
 // 创建application/json 解析器
 var jsonParser = bodyParser.json()
 
@@ -24,6 +27,9 @@ router.post('/update',jsonParser,(req, res, next)=> callback(req, res, next,'upd
 router.get('/detail',(req, res, next)=> callback(req, res, next,'getDetail'));
 router.get('/deleteData',(req, res, next)=> callback(req, res, next,'deleteData'));
 router.get('/ClassifyList',(req, res, next)=> callback(req, res, next,'ClassifyList'));
+router.post('/upload',(req, res, next)=> callback(req, res, next,'upload'));
+
+
 
 module.exports = router;
 

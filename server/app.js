@@ -3,11 +3,18 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const multer = require('multer')
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+
+var objMulter = multer({dest: './upload/'})
+// 允许所有类型的文件传递过来
+app.use(objMulter.any())
+
 var login = true
 // 请求拦截，必须要放在最上面，next 执行下一步
 // app.all('*', function(req,res,next){

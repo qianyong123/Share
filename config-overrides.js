@@ -33,6 +33,7 @@ module.exports = {
     }),
     addWebpackAlias({ //路径别名
       '@': path.resolve(__dirname, 'src'),
+      '/': path.resolve(__dirname, '/'),
     }),
     addWebpackExternals({ //不做打包处理配置，如直接以cdn引入的
       echarts: "window.echarts",

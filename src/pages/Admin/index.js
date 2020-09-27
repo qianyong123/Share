@@ -65,6 +65,7 @@ class IndexClassification extends Component {
   }
 
   handleSearch = (values) => {
+
     this.setState({
       filterFormValues: values || {},
     })

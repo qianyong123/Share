@@ -18,23 +18,17 @@ class UploadFile extends React.Component {
     const { children, onChange, ...rest } = this.props
     let fileList = [...info.fileList];
 
-    // 1. Limit the number of uploaded files
-    // Only to show two recent uploaded files, and old ones will be replaced by the new
-    fileList = fileList.slice(-1);
-
-    // 2. Read from response and show file link
-    fileList = fileList.map(file => {
-      if (file.response) {
-        // Component will show file.url as link
-        file.url = file.response.url;
-      }
-      return file;
-    });
-
     const nameIndex = info.file.name.lastIndexOf('.')
-    if (isType.includes(info.file.name.slice(nameIndex))) {
-      onChange(info.file.name)
-      this.setState({ fileList });
+    if (info.file.status === "done" &&isType.includes(info.file.name.slice(nameIndex))) {
+      const {response={}} = info.file 
+      if(response && response.code === 200){
+        onChange(response.path)
+        this.setState({ fileList });
+        message.success('文件上传成功')
+      } else {
+        message.error('文件上传失败')
+      }
+     
     }
     console.log(info)
 
@@ -46,7 +40,12 @@ class UploadFile extends React.Component {
     const uploadProps = {
       ...rest,
       showUploadList: false,
-      // action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+      action: '/api/admin/upload',
+      headers: {
+        authorization: 'authorization-text',
+      },
+      name: 'file',
+      accept: '*/*',
       onChange: this.handleChange,
       multiple: false, // 是否支持多文件上传
       beforeUpload: (file, fileList) => {

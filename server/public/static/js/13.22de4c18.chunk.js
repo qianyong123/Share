@@ -1,1 +1,0 @@
-(this.webpackJsonpshare=this.webpackJsonpshare||[]).push([[13],{1028:function(t,e,s){"use strict";s.r(e);var c=s(67),n=s(0);e.default=function(t){var e=Object(n.useState)(0),s=Object(c.a)(e,2);return s[0],s[1],Object(n.useEffect)((function(){})),null}}}]);
