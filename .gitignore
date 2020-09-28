@@ -7,6 +7,7 @@
 
 /server/node_modules
 /server/public
+/server/upload
 
 /public
 

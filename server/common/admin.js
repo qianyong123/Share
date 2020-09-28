@@ -9,19 +9,12 @@ var marked = require("marked");
 // 使用连接池连接数据库，避免开太多的线程，提升性能
 var pool = mysql.createPool(dbConfig);
 
-function connectionQuery(sql, callback, res) {
+function connectionQuery(sql, callback, ) {
 
-    try {
-
-        pool.getConnection(function (err, connection) {
-            connection.query(sql, (err2, rows) => callback(err2, rows, connection))
-        })
-
-    } catch (err) {
-        console.error('err222', err);
-        res.end(`<pre> ${err} </pre>`)
-    }
-
+    pool.getConnection(function (err, connection) {
+        connection.query(sql, (err2, rows) => callback(err2, rows, connection))
+    })
+ 
 }
 
 /**
@@ -89,11 +82,13 @@ function query(req, res, next) {
         sql = `${sql} ${limit}`
     }
 
-    connectionQuery(sql, function (err, result) {
+    connectionQuery(sql, function (err, result,connection) {
         console.log('query','sql111')
+         // 释放数据库连接
+         connection.release();
+         
         connectionQuery(sql2, function (err2, rows, connection) {
             if (err2) throw err2;
-            console.log('query','sql222')
             const total = rows[0]['total']
 
             responsePage(res, result, total, err);
@@ -116,11 +111,15 @@ function add(req, res, next) {
 }
 
 function update(req, res, next) {
-    const { text, type, classify, title, time, id } = req.body
+    const { text, type, classify, title, time, id,usedText } = req.body
     if (isNaN(id)) return res.json({ msg: '请传id' + id })
 
     const sql = `UPDATE article_list SET text='${text}',type='${type}',classify='${classify}',title='${title}',time='${time}' WHERE id=${Number(id)}`
     connectionQuery(sql, function (err, rows, connection) {
+        if(rows && usedText !== text){
+            console.log(usedText)
+            fs.unlinkSync(usedText);
+        }
         responseDoReturn(res, rows, err);
         // 释放数据库连接
         connection.release();
@@ -135,20 +134,6 @@ function getDetail(req, res, next) {
     const sql = `SELECT type,text,classify,title,id,DATE_FORMAT(time,'%Y-%m-%d') time  FROM article_list WHERE id=${Number(id)}`
     connectionQuery(sql, function (err, rows, connection) {
             if(err) throw err;
-            // if(rows){
-            //     const text = rows[0].text
-            //     fs.readFile(text,'utf-8', function(err, data){
-            //         if(err){
-            //             console.log(err);
-            //             responseDoReturn(res, 'undefined', err);
-            //         }else{
-            //             str = marked(data.toString());
-            //             const result = rows.concat([])
-            //             result[0].text = str
-            //             responseDoReturn(res, result, err);
-            //         } 
-            //     });
-            // }
             responseDoReturn(res, rows, err);
         // 释放数据库连接
         connection.release();
@@ -180,9 +165,10 @@ function ClassifyList(req, res, next) {
 
 function upload(req, res, next) {
     console.log(req.files)
+    const file = req.files[0]
     // 因为上传过来的文件名称比较复杂,我们需要给文件重新命名
-    // var newName = req.files[0].path+path.parse(req.files[0].originalname).ext
-    var newName = 'upload/' + req.files[0].originalname
+    var newName = (file.path).replace('\\','/')+path.parse(file.originalname).ext
+    // var newName = 'upload/' + req.files[0].originalname
 
 
     // 利用fs模块的文件重命名

@@ -9,7 +9,7 @@ const Index = ({ md,classify }) => {
   useEffect(() => {
     if (md) {
       // const url = require(`@/md/${classify}/${md}`)
-      const url = require(`../../../server/${md}`)
+      const url = require(`server/${md}`)
 
       fetch(url)
         .then(res => res.text())

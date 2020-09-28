@@ -51,7 +51,7 @@ function FormComp(props) {
     try {
       const values = await form.validateFields();
       values.time = values.time ? values.time.format('YYYY-MM-DD') : '';
-      submitForm(({ ...item, ...values }))
+      submitForm(({ ...item, ...values,usedText:item.text }))
       console.log('Success:', values);
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
