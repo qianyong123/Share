@@ -9,7 +9,7 @@
 # /server/public
 /server/upload
 
-/public
+# /public
 
 
 # testing
