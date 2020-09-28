@@ -6,6 +6,11 @@
 .pnp.js
 
 /server/node_modules
+/server/public
+
+/public
+
+
 # testing
 /coverage
 
