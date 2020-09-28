@@ -128,7 +128,7 @@ function update(req, res, next) {
 
 
 function getDetail(req, res, next) {
-    const { id } = req.query
+    const { id,admin } = req.query
     if (isNaN(id)) return res.json({ msg: '请传id' + id })
 
     const sql = `SELECT type,text,classify,title,id,DATE_FORMAT(time,'%Y-%m-%d') time  FROM article_list WHERE id=${Number(id)}`
@@ -136,13 +136,17 @@ function getDetail(req, res, next) {
         if (err) throw err;
         if(rows){
             const path = rows[0].text
+            if(admin){
+                responseDoReturn(res, rows, err);
+                return;
+            } 
             fs.readFile(path, 'utf-8', function (err, data) {
                 if (err) {
                     console.log(err);
                     res.send("文件不存在！");
                 } else {
                     // str = marked(data.toString());
-                    const list = [{...rows[0],text:data}]
+                    const list = [{...rows[0],text: data}]
                     responseDoReturn(res, list, err);
 
                 }
@@ -150,7 +154,6 @@ function getDetail(req, res, next) {
         } else {
             res.json({msg:err})
         }
-        // responseDoReturn(res, rows, err);
         // 释放数据库连接
         connection.release();
     })

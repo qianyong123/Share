@@ -4,7 +4,11 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var app = express();
+const multer = require('multer')
 
+var objMulter = multer({dest: './upload/'})
+// 允许所有类型的文件传递过来
+app.use(objMulter.any())
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');

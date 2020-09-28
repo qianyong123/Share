@@ -134,7 +134,7 @@ class IndexClassification extends Component {
 
   // 编辑
   handEdit = async (id) => {
-    fetching('/api/admin/detail', { data: { id } })
+    fetching('/api/admin/detail', { data: { id,admin:"admin" } })
       .then(res => {
         if (res && res.data) {
           this.handleModalVisible(true,'edit',res.data[0])

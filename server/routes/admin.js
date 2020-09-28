@@ -3,12 +3,7 @@ var express = require('express');
 var dbAction = require('../common/admin');
 var bodyParser = require('body-parser');//解析,用req.body获取post参数
 var router = express.Router();
-const multer = require('multer')
-const app =  express()
 
-var objMulter = multer({dest: './upload/'})
-// 允许所有类型的文件传递过来
-app.use(objMulter.any())
 
 
 
