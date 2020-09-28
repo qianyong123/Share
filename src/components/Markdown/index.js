@@ -6,23 +6,23 @@ import CodeBlock from './CodeBlock'
 
 const Index = ({ md,classify }) => {
   const [value, setValue] = useState()
-  useEffect(() => {
-    if (md) {
-      // const url = require(`@/md/${classify}/${md}`)
-      const url = require(`server/${md}`)
+  // useEffect(() => {
+  //   if (md) {
+  //     // const url = require(`@/md/${classify}/${md}`)
+  //     // const url = require(`server/${md}`)
 
-      fetch(url)
-        .then(res => res.text())
-        .then(text => {
-          setValue(text)
-        }
-        )
-    }
+  //     fetch(md)
+  //       .then(res => res.text())
+  //       .then(text => {
+  //         setValue(text)
+  //       }
+  //       )
+  //   }
 
-  }, [md])
+  // }, [md])
   return (
     <ReactMarkdown
-      source={value}
+      source={md}
       escapeHtml={false}
       renderers={{
         code: CodeBlock,
