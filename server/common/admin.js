@@ -9,12 +9,12 @@ var marked = require("marked");
 // 使用连接池连接数据库，避免开太多的线程，提升性能
 var pool = mysql.createPool(dbConfig);
 
-function connectionQuery(sql, callback, ) {
+function connectionQuery(sql, callback,) {
 
     pool.getConnection(function (err, connection) {
         connection.query(sql, (err2, rows) => callback(err2, rows, connection))
     })
- 
+
 }
 
 /**
@@ -82,11 +82,11 @@ function query(req, res, next) {
         sql = `${sql} ${limit}`
     }
 
-    connectionQuery(sql, function (err, result,connection) {
-        console.log('query','sql111')
-         // 释放数据库连接
-         connection.release();
-         
+    connectionQuery(sql, function (err, result, connection) {
+        console.log('query', 'sql111')
+        // 释放数据库连接
+        connection.release();
+
         connectionQuery(sql2, function (err2, rows, connection) {
             if (err2) throw err2;
             const total = rows[0]['total']
@@ -111,12 +111,12 @@ function add(req, res, next) {
 }
 
 function update(req, res, next) {
-    const { text, type, classify, title, time, id,usedText } = req.body
+    const { text, type, classify, title, time, id, usedText } = req.body
     if (isNaN(id)) return res.json({ msg: '请传id' + id })
 
     const sql = `UPDATE article_list SET text='${text}',type='${type}',classify='${classify}',title='${title}',time='${time}' WHERE id=${Number(id)}`
     connectionQuery(sql, function (err, rows, connection) {
-        if(rows && usedText !== text){
+        if (rows && usedText !== text) {
             console.log(usedText)
             fs.unlinkSync(usedText);
         }
@@ -133,8 +133,24 @@ function getDetail(req, res, next) {
 
     const sql = `SELECT type,text,classify,title,id,DATE_FORMAT(time,'%Y-%m-%d') time  FROM article_list WHERE id=${Number(id)}`
     connectionQuery(sql, function (err, rows, connection) {
-            if(err) throw err;
-            responseDoReturn(res, rows, err);
+        if (err) throw err;
+        if(rows){
+            const path = rows[0].text
+            fs.readFile(path, 'utf-8', function (err, data) {
+                if (err) {
+                    console.log(err);
+                    res.send("文件不存在！");
+                } else {
+                    // str = marked(data.toString());
+                    const list = [{...rows[0],text:data}]
+                    responseDoReturn(res, list, err);
+
+                }
+            });
+        } else {
+            res.json({msg:err})
+        }
+        // responseDoReturn(res, rows, err);
         // 释放数据库连接
         connection.release();
     })
@@ -167,7 +183,7 @@ function upload(req, res, next) {
     console.log(req.files)
     const file = req.files[0]
     // 因为上传过来的文件名称比较复杂,我们需要给文件重新命名
-    var newName = (file.path).replace('\\','/')+path.parse(file.originalname).ext
+    var newName = (file.path).replace('\\', '/') + path.parse(file.originalname).ext
     // var newName = 'upload/' + req.files[0].originalname
 
 
