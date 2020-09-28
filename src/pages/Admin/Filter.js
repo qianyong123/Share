@@ -12,7 +12,9 @@ function Filter(props) {
   const {
     onSearch,
     resetForm,
-    classList
+    classList,
+    onLogin,
+    username
   } = props
   const [form] = Form.useForm();
 
@@ -37,12 +39,25 @@ function Filter(props) {
 
   return (
     <div>
+
+      { username
+        ?
+        <p style={{ marginBottom: 10 }}>{username}</p>
+        :
+        <Button
+          type="primary"
+          style={{ marginBottom: 10 }}
+          onClick={onLogin}
+        >
+          登录
+      </Button>
+      }
       <Form onFinish={onFinish} form={form} {...formItemLayout}>
         <Form.Item name="title">
           <Input allowClear placeholder="输入标题关键字" />
         </Form.Item>
         <Form.Item name="classify">
-          <Select style={{width:150}} placeholder="请选择技术分类" allowClear>
+          <Select style={{ width: 150 }} placeholder="请选择技术分类" allowClear>
             {
               classList.map(v => <Option key={v.id} value={v.name}>{v.name}</Option>)
             }
@@ -57,6 +72,8 @@ function Filter(props) {
             重置
             </Button>
         </FormItem>
+
+
       </Form>
     </div>
   )

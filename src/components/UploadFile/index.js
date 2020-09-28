@@ -24,7 +24,7 @@ class UploadFile extends React.Component {
       if(response && response.code === 200){
         onChange(response.path)
         this.setState({ fileList });
-        message.success('文件上传成功')
+        message.success('文件上传成功',2)
       } else {
         message.error('文件上传失败')
       }
@@ -71,7 +71,7 @@ class UploadFile extends React.Component {
             : 
             <>
               <Button icon={<UploadOutlined />}>上传</Button>
-              <p title={value}>{value}</p>
+              <p style={{width:'300px'}} title={value}>{value}</p>
             </>
         }
 

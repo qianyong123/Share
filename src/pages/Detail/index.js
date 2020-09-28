@@ -2,10 +2,8 @@
 
 import React, { useEffect, useState } from 'react'
 import {
-  useLocation,
-  useParams
+  useLocation
 } from "react-router-dom";
-import DataList from '@/md'
 import Markdown from '@/components/Markdown'
 import fetching from '@/util/fetching'
 import './index.less'

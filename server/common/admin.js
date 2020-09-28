@@ -99,6 +99,43 @@ function query(req, res, next) {
     }, res)
 }
 
+function login(req, res, next) {
+    const { username, password } = req.body
+    const sql = `SELECT username,password,id FROM user WHERE 1=1 AND username='${username}' AND password='${password}'`
+    console.log(req.body)
+    console.log(sql)
+
+    connectionQuery(sql, function (err, rows, connection) {
+   
+        if (typeof rows === 'undefined') {
+            console.error(err);
+            res.json({
+                code: 201,
+                msg: err
+            });
+        } else {
+
+            if( rows && rows.length < 1){
+                res.json({
+                    code: 201,
+                    msg:'用户名或密码错误！'
+                });
+            } else {
+                res.json({
+                    code: 200,
+                    data: rows
+                });
+            }
+    
+           
+        }
+
+        // 释放数据库连接
+        connection.release();
+    })
+
+}
+
 function add(req, res, next) {
     const { text, type, classify, title, time } = req.body
     const sql = `INSERT INTO article_list VALUES (${null},'${text}','${type}','${classify}','${title}','${time}')`
@@ -128,31 +165,31 @@ function update(req, res, next) {
 
 
 function getDetail(req, res, next) {
-    const { id,admin } = req.query
+    const { id, admin } = req.query
     if (isNaN(id)) return res.json({ msg: '请传id' + id })
 
     const sql = `SELECT type,text,classify,title,id,DATE_FORMAT(time,'%Y-%m-%d') time  FROM article_list WHERE id=${Number(id)}`
     connectionQuery(sql, function (err, rows, connection) {
         if (err) throw err;
-        if(rows){
+        if (rows) {
             const path = rows[0].text
-            if(admin){
+            if (admin) {
                 responseDoReturn(res, rows, err);
                 return;
-            } 
+            }
             fs.readFile(path, 'utf-8', function (err, data) {
                 if (err) {
                     console.log(err);
-                    res.send("文件不存在！");
+                    res.json({ msg: "文件不存在！" });
                 } else {
                     // str = marked(data.toString());
-                    const list = [{...rows[0],text: data}]
+                    const list = [{ ...rows[0], text: data }]
                     responseDoReturn(res, list, err);
 
                 }
             });
         } else {
-            res.json({msg:err})
+            res.json({ msg: err })
         }
         // 释放数据库连接
         connection.release();
@@ -229,5 +266,6 @@ module.exports = {
     ClassifyList,
     update,
     deleteData,
-    upload
+    upload,
+    login
 }

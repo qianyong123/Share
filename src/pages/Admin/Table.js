@@ -16,7 +16,8 @@ function TableList(props) {
     onDelete,
     data,
     total,
-    loadingList = false
+    loadingList = false,
+    username
   } = props
 
   const pagination = {
@@ -82,6 +83,7 @@ function TableList(props) {
       className: 'tableActions',
       render: (text, record) => (
         <Dropdown
+        disabled={!username}
           overlay={
             <Menu>
 

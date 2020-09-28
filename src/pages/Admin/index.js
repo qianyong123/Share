@@ -6,6 +6,7 @@ import {
 import Filter from './Filter'
 import TableList from './Table'
 import FormComp from './Form'
+import Login from './Login'
 import fetching from '@/util/fetching'
 
 
@@ -24,17 +25,23 @@ class IndexClassification extends Component {
       modalType: 'new',
       modalVisible: false,
     },
+    modalLogin: false,
     filterFormValues: {},
     data: [],
     total: 0,
     classList: [],
-    loadingList:false
+    loadingList: false,
+    username:''
   }
 
 
   componentDidMount() {
     this.requestList()
     this.getClassify()
+    const username = localStorage.getItem('username')
+    this.setState({
+      username
+    })
   }
 
   requestBasicsGrade = () => { // 获取评分
@@ -85,12 +92,12 @@ class IndexClassification extends Component {
   requestList = (params) => {
     const { filterFormValues } = this.state
     const data = {
-      pageNumber:1,
-      pageSize:10,
+      pageNumber: 1,
+      pageSize: 10,
       ...(params || filterFormValues)
     }
     let that = this
-    fetching('/api/admin/query', { data})
+    fetching('/api/admin/query', { data })
       .then(res => {
         if (res && res.code === 200) {
           that.setState({
@@ -117,13 +124,13 @@ class IndexClassification extends Component {
 
   // 提交
   handleFormSubmit = (values) => {
-    const {modal:{modalType}} = this.state
-    const url = modalType === 'new' ? '/api/admin/add': `/api/admin/update`
+    const { modal: { modalType } } = this.state
+    const url = modalType === 'new' ? '/api/admin/add' : `/api/admin/update`
     fetching(url, { method: 'POST', body: values })
       .then(res => {
         if (res && res.code === 200) {
           this.handleModalVisible(false)
-          message.success('操作成功')
+          message.success('操作成功', 2)
           this.requestList()
         }
       })
@@ -134,10 +141,10 @@ class IndexClassification extends Component {
 
   // 编辑
   handEdit = async (id) => {
-    fetching('/api/admin/detail', { data: { id,admin:"admin" } })
+    fetching('/api/admin/detail', { data: { id, admin: "admin" } })
       .then(res => {
         if (res && res.data) {
-          this.handleModalVisible(true,'edit',res.data[0])
+          this.handleModalVisible(true, 'edit', res.data[0])
         }
       })
   }
@@ -153,12 +160,12 @@ class IndexClassification extends Component {
       cancelText: '取消',
       onOk() {
         fetching('/api/admin/deleteData', { data: { id } })
-        .then(res => {
-          if (res.data) {
-            message.success('删除成功')
-            self.handleSearch()
-          }
-        })
+          .then(res => {
+            if (res.data) {
+              message.success('删除成功')
+              self.handleSearch()
+            }
+          })
       },
     })
   }
@@ -173,29 +180,58 @@ class IndexClassification extends Component {
     this.requestList({ ...filterFormValues, ...params })
   }
 
+  handleModalLogin = () => {
+    this.setState((state) => {
+      return { modalLogin: !state.modalLogin }
+    })
+  }
 
+
+
+  handleLoginSubmit = (values) =>{
+    console.log(values)
+    fetching('/api/admin/login', { method: 'POST', body: values })
+    .then(res => {
+      if (res && res.code === 200) {
+        message.success('登录成功',2)
+        this.handleModalLogin()
+        localStorage.setItem('username',res.data[0].username)
+        this.setState({
+          username:res.data[0].username
+        })
+      }
+    }).catch((err)=>{
+      message.error(`登录失败 ${err}`)
+    })
+  }
 
   render() {
-    const { modal, filterFormValues, data, classList, total } = this.state
+    const { modal, filterFormValues, data, classList, total,modalLogin,username } = this.state
 
     return (
       <div>
         <Layout>
+
           <Card bordered={false} style={{ marginBottom: 20 }}>
             <Filter
               resetForm={this.handleFormReset}
               onSearch={this.handleSearch}
               filterFormValues={filterFormValues}
               classList={classList}
+              username={username}
+              onLogin={() => this.handleModalLogin(true)}
             />
+
           </Card>
           <Card bordered={false}>
             <div style={{ marginBottom: 5 }}>
               <span>共有<b>{total}</b>条信息</span>
+
               <Button
+                disabled={!username}
                 icon={<PlusOutlined />}
-                onClick={() => this.handleModalVisible(true,'new',{})}
-                style={{ background: '#ee9800', color: '#fff', float: 'right', marginBottom: 20 }}
+                onClick={() => this.handleModalVisible(true, 'new', {})}
+                style={{ float: 'right', marginBottom: 20 }}
               >
                 添加
               </Button>
@@ -209,6 +245,7 @@ class IndexClassification extends Component {
               onEdit={this.handEdit}
               onDelete={this.handleDelete}
               total={total}
+              username={username}
             />
           </Card>
         </Layout>
@@ -220,7 +257,12 @@ class IndexClassification extends Component {
           submitForm={this.handleFormSubmit}
           classList={classList}
         />
-
+        <Login // 登录
+          title='登录'
+          modalLogin={modalLogin}
+          onCancelClick={() => this.handleModalLogin(false)}
+          submitForm={this.handleLoginSubmit}
+        />
 
 
       </div>)
