@@ -1,7 +1,8 @@
 
 import { message } from 'antd'
 
-async function fetching (url, item = {}) {
+async function fetching(url, item = {}) {
+
 
   const {
     method = "GET",
@@ -36,19 +37,19 @@ async function fetching (url, item = {}) {
     }
   }
 
-  
-  return fetch(url, pramas)
+ 
+    return fetch(url, pramas)
       .then(response => response.json())
       .then(res => {
-        if (res && res.code !== 200) {
-          message.error(res.msg || '服务器错误')
-        }
-        return res
+        if (!res || (res && res.code !== 200)) {
+          throw res;
+        } else return res
       })
       .catch((err) => {
+        alert('错误提示 '+ JSON.stringify(err ))
         console.log('err', err)
       })
-   
+ 
 
 }
 

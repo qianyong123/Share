@@ -14,7 +14,8 @@ function Filter(props) {
     resetForm,
     classList,
     onLogin,
-    username
+    username,
+    removeLogin
   } = props
   const [form] = Form.useForm();
 
@@ -42,7 +43,10 @@ function Filter(props) {
 
       { username
         ?
-        <p style={{ marginBottom: 10 }}>{username}</p>
+        <p style={{ marginBottom: 10 }}>
+          <span> {username}</span>
+          <span onClick={removeLogin} style={{marginLeft:20,color:"#f77c7c", cursor: 'pointer'}}>退出登录</span>
+        </p>
         :
         <Button
           type="primary"

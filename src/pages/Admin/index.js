@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Layout, message, Button, Card, Modal } from 'antd'
+import { Layout, message, Button, Card, Modal, Spin } from 'antd'
 import {
   PlusOutlined
 } from '@ant-design/icons';
@@ -31,7 +31,8 @@ class IndexClassification extends Component {
     total: 0,
     classList: [],
     loadingList: false,
-    username:''
+    username: null,
+    loding: false
   }
 
 
@@ -42,6 +43,11 @@ class IndexClassification extends Component {
     this.setState({
       username
     })
+   
+  }
+
+  setLoding = (loding) => {
+    this.setState({ loding })
   }
 
   requestBasicsGrade = () => { // 获取评分
@@ -97,8 +103,10 @@ class IndexClassification extends Component {
       ...(params || filterFormValues)
     }
     let that = this
+    this.setLoding(true)
     fetching('/api/admin/query', { data })
       .then(res => {
+        that.setLoding(false)
         if (res && res.code === 200) {
           that.setState({
             data: res.data,
@@ -126,8 +134,10 @@ class IndexClassification extends Component {
   handleFormSubmit = (values) => {
     const { modal: { modalType } } = this.state
     const url = modalType === 'new' ? '/api/admin/add' : `/api/admin/update`
+    this.setLoding(true)
     fetching(url, { method: 'POST', body: values })
       .then(res => {
+        this.setLoding(false)
         if (res && res.code === 200) {
           this.handleModalVisible(false)
           message.success('操作成功', 2)
@@ -188,28 +198,33 @@ class IndexClassification extends Component {
 
 
 
-  handleLoginSubmit = (values) =>{
-    console.log(values)
+  handleLoginSubmit = (values) => {
     fetching('/api/admin/login', { method: 'POST', body: values })
-    .then(res => {
-      if (res && res.code === 200) {
-        message.success('登录成功',2)
-        this.handleModalLogin()
-        localStorage.setItem('username',res.data[0].username)
-        this.setState({
-          username:res.data[0].username
-        })
-      }
-    }).catch((err)=>{
-      message.error(`登录失败 ${err}`)
+      .then(res => {
+
+        if (res && res.code === 200) {
+          message.success('登录成功', 2)
+          this.handleModalLogin()
+          localStorage.setItem('username', res.data[0].username)
+          this.setState({
+            username: res.data[0].username
+          })
+        }
+      })
+  }
+
+  removeLogin = () => {
+    this.setState({
+      username: null
     })
+    localStorage.removeItem('username')
   }
 
   render() {
-    const { modal, filterFormValues, data, classList, total,modalLogin,username } = this.state
+    const { modal, filterFormValues, data, classList, total, modalLogin, username, loding } = this.state
 
     return (
-      <div>
+      <Spin spinning={loding}>
         <Layout>
 
           <Card bordered={false} style={{ marginBottom: 20 }}>
@@ -219,6 +234,7 @@ class IndexClassification extends Component {
               filterFormValues={filterFormValues}
               classList={classList}
               username={username}
+              removeLogin={this.removeLogin}
               onLogin={() => this.handleModalLogin(true)}
             />
 
@@ -265,7 +281,7 @@ class IndexClassification extends Component {
         />
 
 
-      </div>)
+      </Spin>)
   }
 }
 

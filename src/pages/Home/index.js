@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react'
 import {
   useLocation
 } from "react-router-dom";
-import { Row, Col, Pagination } from 'antd';
+import { Row, Col, Pagination, Spin } from 'antd';
 import ListItem from '@/components/ListItem'
 import fetching from '@/util/fetching'
 
@@ -22,6 +22,7 @@ const Index = () => {
   const [pageNumber, setpageNumber] = useState(1)
   const [pageSize, setpageSize] = useState(10)
   const [total, setTotal] = useState(0)
+  const [loding, setLoding] = useState(false)
 
 
   const location = useLocation()
@@ -39,6 +40,7 @@ const Index = () => {
   }
 
   const fetchList = (number, Size) => {
+    setLoding(true)
     fetching('/api/admin/query', {
       data: {
         classify: path,
@@ -47,6 +49,7 @@ const Index = () => {
       }
     })
       .then(res => {
+        setLoding(false)
         if (res && res.data) {
           SetList(res.data)
           setTotal(res.total)
@@ -55,35 +58,37 @@ const Index = () => {
   }
 
   return (
-    <div className="home">
-      <Row className="rowList">
+    <Spin spinning={loding}>
+      <div className="home">
+        <Row className="rowList">
+          {
+            List.length < 1
+              ?
+              <h3 className="noneData">暂无数据</h3>
+              :
+              List.map(item => {
+                return (
+                  <Col key={item.id} xs={xs} sm={sm} md={md} lg={lg} xl={xl} xxl={xxl}>
+                    <ListItem item={item} />
+                  </Col>
+                )
+              })
+          }
+        </Row>
         {
-          List.length < 1
-            ?
-            <h3 className="noneData">暂无数据</h3>
-            :
-            List.map(item => {
-              return (
-                <Col key={item.id} xs={xs} sm={sm} md={md} lg={lg} xl={xl} xxl={xxl}>
-                  <ListItem item={item} />
-                </Col>
-              )
-            })
+          total > 10 &&
+          <Pagination
+            style={{ padding: "40px 20px", }}
+            current={pageNumber}
+            pageSize={pageSize}
+            total={total}
+            showSizeChanger
+            onChange={onChange}
+          />
         }
-      </Row>
-      {
-        total > 10 &&
-        <Pagination
-          style={{ padding: "40px 20px", }}
-          current={pageNumber}
-          pageSize={pageSize}
-          total={total}
-          showSizeChanger
-          onChange={onChange}
-        />
-      }
 
-    </div>
+      </div>
+    </Spin>
   );
 }
 
