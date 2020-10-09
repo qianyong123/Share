@@ -31,8 +31,12 @@ app.set('view engine', 'jade');
 
 //  引入新建的路由文件
 var admin = require('./routes/admin'); 
+var file = require('./routes/file'); 
+
 // 映射路由访问地址
 app.use('/api/admin',admin);
+app.use('/api/file',file);
+
 
 app.use(logger('dev'));
 app.use(express.json());

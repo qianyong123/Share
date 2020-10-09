@@ -27,8 +27,9 @@ router.post('/update',jsonParser,(req, res, next)=> callback(req, res, next,'upd
 router.get('/detail',(req, res, next)=> callback(req, res, next,'getDetail'));
 router.get('/deleteData',(req, res, next)=> callback(req, res, next,'deleteData'));
 router.get('/ClassifyList',(req, res, next)=> callback(req, res, next,'ClassifyList'));
-router.post('/upload',(req, res, next)=> callback(req, res, next,'upload'));
 router.post('/login',jsonParser,(req, res, next)=> callback(req, res, next,'login'));
+
+
 
 
 

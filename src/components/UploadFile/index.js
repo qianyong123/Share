@@ -1,9 +1,8 @@
 
 
 import React from 'react'
-import { Upload, Button, message } from 'antd';
+import { Upload, Button, message,notification } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-
 const isType = [
   '.md'
 ]
@@ -19,28 +18,28 @@ class UploadFile extends React.Component {
     let fileList = [...info.fileList];
 
     const nameIndex = info.file.name.lastIndexOf('.')
-    if (info.file.status === "done" &&isType.includes(info.file.name.slice(nameIndex))) {
-      const {response={}} = info.file 
-      if(response && response.code === 200){
+    if (info.file.status === "done" && isType.includes(info.file.name.slice(nameIndex))) {
+      const { response = {} } = info.file
+      if (response && response.code === 200) {
         onChange(response.path)
         this.setState({ fileList });
-        message.success('文件上传成功',2)
+        message.success('文件上传成功', 2)
       } else {
         message.error('文件上传失败')
       }
-     
+
     }
     console.log(info)
 
   };
 
   render() {
-    const { children, onChange,value, ...rest } = this.props
+    const { children, onChange, value, ...rest } = this.props
 
     const uploadProps = {
       ...rest,
       showUploadList: false,
-      action: '/api/admin/upload',
+      action: '/api/file/upload',
       headers: {
         authorization: 'authorization-text',
       },
@@ -63,19 +62,64 @@ class UploadFile extends React.Component {
         }
       },
     };
-    return (
-      <Upload {...uploadProps}>
-        {
-          children
-            ? children()
-            : 
-            <>
-              <Button icon={<UploadOutlined />}>上传</Button>
-              <p style={{width:'300px'}} title={value}>{value}</p>
-            </>
-        }
 
-      </Upload>
+   const downFile = (blob, fileName) => {
+      if (window.navigator.msSaveOrOpenBlob) {
+        navigator.msSaveBlob(blob, fileName)
+      } else {
+        const link = document.createElement('a')
+        link.href = window.URL.createObjectURL(blob)
+        link.download = fileName
+        link.click()
+        window.URL.revokeObjectURL(link.href)
+      }
+    }
+
+    const download = () => {
+      const name = value.replace('upload/','')
+      fetch('/api/file/download?text=' + value,{
+        // responseType: 'arraybuffer',
+        responseType: 'blob' 
+      })
+      .then(response => response.blob())
+      .then( data => {
+        console.log(data)
+        try {
+          if(data.type === "application/json"){
+            message.error('下载失败,请检查是否有这个文件！')
+            return;
+          }
+          const blob = new Blob([data])
+          downFile(blob, name)
+        } catch (error) {
+          console.log(error)
+        }
+      })
+      .catch(err => console.log(err))
+    }
+
+    return (
+      <>
+        <Upload {...uploadProps}>
+          {
+            children
+              ? children()
+              :
+              <>
+                <Button icon={<UploadOutlined />}>上传</Button>
+                <p style={{ width: '300px',margin:'10px 0' }} title={value}>
+                  {value}
+                </p>
+              </>
+          }
+
+        </Upload>
+        {
+        value &&
+        <Button onClick={download}>
+          下载文件
+        </Button>}
+      </>
     );
   }
 }
