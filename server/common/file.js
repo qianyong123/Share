@@ -35,8 +35,6 @@ function download (req, res, next){
         'Content-Type': 'application/force-download',
         'Content-Disposition': 'attachment; filename=' + name,
         'Content-Length': size,
-        'Content-Name': name,
-
       });
       f.pipe(res);
   }

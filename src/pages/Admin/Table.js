@@ -3,9 +3,11 @@ import { Table, Icon, Dropdown, Menu, Button, Tooltip, Typography } from 'antd';
 import {
   DownOutlined,
   EditOutlined,
-  DeleteOutlined
+  DeleteOutlined,
+  DownloadOutlined
 } from '@ant-design/icons';
 import './index.less'
+import Download from '@/components/Download'
 
 const { Paragraph } = Typography;
 function TableList(props) {
@@ -75,6 +77,30 @@ function TableList(props) {
       ),
     },
     {
+      title: '文章',
+      dataIndex: 'text',
+      key: 'text',
+      align: 'center',
+      ellipsis: true,
+      render: text => (
+        <Download fileName={text}>
+          {
+            () => {
+              const name = text.replace('upload/', '');
+              return (
+                <Tooltip placement="topLeft" title={name}>
+                  <DownloadOutlined />
+                  <span className="fileName">{name}</span>
+                </Tooltip>
+              )
+            }
+          }
+        </Download>
+
+
+      ),
+    },
+    {
       title: '操作',
       key: 'actions',
       align: 'center',
@@ -83,7 +109,7 @@ function TableList(props) {
       className: 'tableActions',
       render: (text, record) => (
         <Dropdown
-        disabled={!username}
+          disabled={!username}
           overlay={
             <Menu>
 
@@ -114,7 +140,7 @@ function TableList(props) {
       dataSource={data}
       rowKey="id"
       // scroll={{ x: 'max-content' }}
-       scroll={{ x: 800 }}
+      scroll={{ x: 800 }}
 
       size="middle"
       pagination={pagination}

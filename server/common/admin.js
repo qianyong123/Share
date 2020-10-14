@@ -83,7 +83,6 @@ function query(req, res, next) {
     }
 
     connectionQuery(sql, function (err, result, connection) {
-        console.log('query', 'sql111')
         // 释放数据库连接
         connection.release();
 

@@ -115,7 +115,7 @@ function FormComp(props) {
         >
           <Select allowClear>
             {
-              classList.map(v => <Option key={v.id} value={v.name}>{v.name}</Option>)
+              classList.map(v => <Option key={v.id} value={v.name}>{v.label}</Option>)
             }
           </Select>
         </Form.Item>

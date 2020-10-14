@@ -48,10 +48,12 @@ function Index() {
     return null
   }
 
+ 
+
   return (
     <Header className="headersBox">
       <div className="headers">
-        <h2>Share</h2>
+          <h2>Share</h2>
         {
           iswidth
             ?

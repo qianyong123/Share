@@ -4,9 +4,9 @@
 
 ## absolute + 负margin
 
-代码实现
+**代码实现**
 
-```
+```css
 .wrapBox5{
     width: 300px;
     height: 300px;
@@ -29,9 +29,9 @@
 
 ## absolute + margin auto
 
-* 代码实现
+**代码实现**
 
-```
+```css
 .wrapBox{
     width: 300px;
     height: 300px;
@@ -51,13 +51,12 @@
     margin:auto;
 }
 ```
-在这里插入图片描述
 
 ## absolute + calc
 
-* 代码实现
+**代码实现**
 
-```
+```css
 .wrapBox6{
     width: 300px;
     height: 300px;
@@ -82,9 +81,9 @@
 
 ## absolute + transform
 
-* 代码实现
+**代码实现**
 
-```
+```css
 .wrapBox{
     width: 300px;
     height: 300px;
@@ -113,7 +112,7 @@
 
 ## flex布局
 
-```
+```css
 .wrapBox2{
     width: 300px;
     height: 300px;
@@ -122,6 +121,7 @@
     justify-content: center;
     align-items: center;
 }
+
 /*注意：即使不设置子元素为行块元素也不会独占一层*/
 .wrapItem2{
     width: 100px;
@@ -140,9 +140,9 @@
 
 ## table-cell布局
 
-### 代码实现
+**代码实现**
 
-```
+```css
 .wrapBox3{
     width: 300px;
     height: 300px;
@@ -166,9 +166,9 @@
 
 ## table元素
 
-### 代码实现
+**代码实现**
 
-```
+```css
 .tableBox{
     border:2px solid yellow;
     width: 300px;

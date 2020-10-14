@@ -63,7 +63,7 @@ function Filter(props) {
         <Form.Item name="classify">
           <Select style={{ width: 150 }} placeholder="请选择技术分类" allowClear>
             {
-              classList.map(v => <Option key={v.id} value={v.name}>{v.name}</Option>)
+              classList.map(v => <Option key={v.id} value={v.name}>{v.label}</Option>)
             }
           </Select>
         </Form.Item>

@@ -7,7 +7,7 @@ const isType = [
   '.md'
 ]
 
-class UploadFile extends React.Component {
+class Download extends React.Component {
   state = {
     fileList: [
     ],
@@ -114,14 +114,14 @@ class UploadFile extends React.Component {
           }
 
         </Upload>
-        {
+        {/* {
         value &&
         <Button onClick={download}>
           下载文件
-        </Button>}
+        </Button>} */}
       </>
     );
   }
 }
 
-export default UploadFile
+export default Download
