@@ -89,7 +89,7 @@ function TableList(props) {
               const name = text.replace('upload/', '');
               return (
                 <Tooltip placement="topLeft" title={name}>
-                  <DownloadOutlined />
+                  <DownloadOutlined style={{fontSize:16}} />
                   <span className="fileName">{name}</span>
                 </Tooltip>
               )
