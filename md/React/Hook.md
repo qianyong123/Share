@@ -263,15 +263,71 @@ Hook 本质就是 JavaScript 函数，但是在使用它时需要遵循两条规
 
 # 其他的 Hook
 
-- useContext
-- useReducer
-- useCallback
-- useMemo
-- useRef
-- useImperativeHandle
-- useLayoutEffect
-- useDebugValue
+## useContext
+```jsx
+const value = useContext(MyContext);
 
-**有兴趣继续了解其他的Hook，可以去官网查看** [React 官方中文文档](https://react.docschina.org/docs/hooks-reference.html)
+```
+接收一个 context 对象（React.createContext 的返回值）并返回该 context 的当前值。当前的 context 值由上层组件中距离当前组件最近的 <MyContext.Provider> 的 value prop 决定。
+
+## useReducer
+```js
+const [state, dispatch] = useReducer(reducer, initialArg, init);
+```
+useState 的替代方案。它接收一个形如 (state, action) => newState 的 reducer，并返回当前的 state 以及与其配套的 dispatch 方法。（如果你熟悉 Redux 的话，就已经知道它如何工作了。）
+
+## useCallback
+```js
+const memoizedCallback = useCallback(
+  () => {
+    doSomething(a, b);
+  },
+  [a, b],
+);
+```
+- 返回一个 memoized 回调函数。
+
+- 把内联回调函数及依赖项数组作为参数传入 useCallback，它将返回该回调函数的 memoized 版本，该回调函数仅在某个依赖项改变时才会更新。当你把回调函数传递给经过优化的并使用引用相等性去避免非必要渲染（例如 shouldComponentUpdate）的子组件时，它将非常有用。
+
+- useCallback(fn, deps) 相当于 useMemo(() => fn, deps)。
+
+## useMemo
+```js
+const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+```
+- 返回一个 memoized 值。
+
+- 把“创建”函数和依赖项数组作为参数传入 useMemo，它仅会在某个依赖项改变时才重新计算 memoized 值。这种优化有助于避免在每次渲染时都进行高开销的计算。
+
+- 记住，传入 useMemo 的函数会在渲染期间执行。请不要在这个函数内部执行与渲染无关的操作，诸如副作用这类的操作属于 useEffect 的适用范畴，而不是 useMemo。
+
+- 如果没有提供依赖项数组，useMemo 在每次渲染时都会计算新的值。
+
+## useRef
+```js
+const refContainer = useRef(initialValue);
+```
+- useRef 返回一个可变的 ref 对象，其 .current 属性被初始化为传入的参数（initialValue）。返回的 ref 对象在组件的整个生命周期内保持不变。
+
+## useImperativeHandle
+```js
+useImperativeHandle(ref, createHandle, [deps])
+```
+- useImperativeHandle 可以让你在使用 ref 时自定义暴露给父组件的实例值。在大多数情况下，应当避免使用 ref 这样的命令式代码。- useImperativeHandle 应当与 forwardRef 一起使用：
+
+## useLayoutEffect
+
+- 其函数签名与 useEffect 相同，但它会在所有的 DOM 变更之后同步调用 effect。可以使用它来读取 DOM 布局并同步触发重渲染。在浏览器执行绘制之前，useLayoutEffect 内部的更新计划将被同步刷新。
+
+- 尽可能使用标准的 useEffect 以避免阻塞视觉更新。
+
+## useDebugValue
+```js
+useDebugValue(value)
+```
+
+useDebugValue 可用于在 React 开发者工具中显示自定义 hook 的标签。
+
+[React 官方中文文档](https://react.docschina.org/docs/hooks-reference.html)
 
 
