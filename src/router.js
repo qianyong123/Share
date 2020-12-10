@@ -7,89 +7,76 @@ const Detail = loadable(() => import('./pages/Detail'))
 const UploadText = loadable(() => import('./pages/UploadText'))
 const Admin = loadable(() => import('./pages/Admin'))
 
-
 const Error = loadable(() => import('./pages/Error'))
 
-
-// 跳转到二级子路由不能有exact
- const router = [
-  {
-    path: '/',
-    name: '首页',
-    exact:true,
-    component:<Home />,
-    hide:true
-  },
-  {
-    path: '/Home',
-    name: '首页',
-    component:<Home />,
-    children:[
-      {
-        path: '/home',
-        name: '首页',
-        component:<Home />,
-      },
-     
-    ]
-  },
-
-  {
-    path: '/Admin',
-    name: 'Admin',
-    hide:true,
-    component:<Admin />,
-  },
+export const routerChild = [
   {
     path: '/note',
     name: 'note',
     hide:true,
-    component:<Note />,
+    component:Note,
   },
   {
     path: '/JavaScript',
     name: 'JavaScript',
-    component:<Home />,
+    component:Home,
   },
   {
     path: '/HtmlCss',
     name: 'HtmlCss',
-    component:<Home />,
+    component:Home,
   },
   {
     path: '/Vue',
     name: 'Vue',
-    component:<Home />,
+    component:Home,
   },
   {
     path: '/React',
     name: 'React',
-    component:<Home />,
+    component:Home,
   },
   {
     path: '/Rest',
     name: '杂类技术',
-    component:<Home />,
+    component:Home,
   },
   {
     path: '/Detail',
     name: 'detail',
     hide:true,
-    component:<Detail />,
+    component:Detail,
   },
 
   {
     path: '/uploadText',
     name: '上传文章',
     hide:true,
-    component:<UploadText />,
+    component:UploadText,
   },
+]
+
+// 跳转到二级子路由不能有exact
+ const router = [
   {
-    path: '/error',
-    name: '404',
-     hide:true,
-    component:<Error />,
+    path: '/Home',
+    name: '首页',
+    exact:true,
   },
+  ...routerChild,
+  // {
+  //   path: '/Admin',
+  //   name: 'Admin',
+  //   hide:true,
+  //   component:<Admin />,
+  // },
+ 
+  // {
+  //   path: '/error',
+  //   name: '404',
+  //    hide:true,
+  //   component:<Error />,
+  // },
 ]
 
 export default router

@@ -4,9 +4,12 @@ import React, { useEffect, useState } from 'react'
 import {
   useLocation
 } from "react-router-dom";
-import { Row, Col, Pagination, Spin } from 'antd';
+import { Row, Col, Pagination, Spin,Layout } from 'antd';
 import ListItem from '@/components/ListItem'
 import fetching from '@/util/fetching'
+import Headers from '@/components/Header'
+import Footers from '@/components/Footer'
+const { Footer, Content } = Layout;
 
 const { xs, sm, md, lg, xl, xxl } = {
   xs: { span: 24, offset: 0 }, //<576px
@@ -27,7 +30,6 @@ const Index = () => {
 
   const location = useLocation()
   const path = location.pathname === '/' || location.pathname === '/Home' ? '' : location.pathname.replace('/', '')
-
   useEffect(() => {
     fetchList(1, 10)
   }, [location])
@@ -58,37 +60,46 @@ const Index = () => {
   }
 
   return (
-    <Spin spinning={loding}>
-      <div className="home">
-        <Row className="rowList">
-          {
-            List.length < 1
-              ?
-              <h3 className="noneData">暂无数据</h3>
-              :
-              List.map(item => {
-                return (
-                  <Col key={item.id} xs={xs} sm={sm} md={md} lg={lg} xl={xl} xxl={xxl}>
-                    <ListItem item={item} />
-                  </Col>
-                )
-              })
-          }
-        </Row>
-        {
-          total > 10 &&
-          <Pagination
-            style={{ padding: "40px 20px", }}
-            current={pageNumber}
-            pageSize={pageSize}
-            total={total}
-            showSizeChanger
-            onChange={onChange}
-          />
-        }
+    <Layout style={{ height: '100%' }}>
+      <Headers />
+      <Content className="Content">
+        <Spin spinning={loding}>
+          <div className="home">
+            <Row className="rowList">
+              {
+                List.length < 1
+                  ?
+                  <h3 className="noneData">暂无数据</h3>
+                  :
+                  List.map(item => {
+                    return (
+                      <Col key={item.id} xs={xs} sm={sm} md={md} lg={lg} xl={xl} xxl={xxl}>
+                        <ListItem item={item} />
+                      </Col>
+                    )
+                  })
+              }
+            </Row>
+            {
+              total > 10 &&
+              <Pagination
+                style={{ padding: "40px 20px", }}
+                current={pageNumber}
+                pageSize={pageSize}
+                total={total}
+                showSizeChanger
+                onChange={onChange}
+              />
+            }
 
-      </div>
-    </Spin>
+          </div>
+        </Spin>
+      </Content>
+      <Footer>
+        <Footers />
+      </Footer>
+    </Layout>
+
   );
 }
 

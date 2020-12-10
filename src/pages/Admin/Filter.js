@@ -1,6 +1,11 @@
 import React, { PureComponent } from 'react'
-import { Input, Select, Button, Form } from 'antd'
+import { Input, Select, Button, Form, Menu } from 'antd'
+import {
+  Link,
+  
+} from "react-router-dom";
 
+const { SubMenu } = Menu;
 const { Option } = Select
 const FormItem = Form.Item
 
@@ -8,6 +13,7 @@ const FormItem = Form.Item
 
 
 function Filter(props) {
+  const [form] = Form.useForm();
 
   const {
     onSearch,
@@ -17,7 +23,6 @@ function Filter(props) {
     username,
     removeLogin
   } = props
-  const [form] = Form.useForm();
 
   const handleReset = () => {
 
@@ -37,25 +42,43 @@ function Filter(props) {
     labelAlign: 'left',
   }
 
+  const handleClick = e => {
+    console.log('click ', e);
+  };
 
   return (
     <div>
+      <div className="menuDiv">
+        {
+          username
+            ?
+            <p style={{ marginBottom: 10 }}>
+              <span> {username}</span>
+              <span onClick={removeLogin} style={{ marginLeft: 20, color: "#f77c7c", cursor: 'pointer' }}>退出登录</span>
+            </p>
+            :
+            <Button
+              type="primary"
+              style={{ marginBottom: 10 }}
+              onClick={onLogin}
+            >
+              登录
+        </Button>
+        }
 
-      { username
-        ?
-        <p style={{ marginBottom: 10 }}>
-          <span> {username}</span>
-          <span onClick={removeLogin} style={{marginLeft:20,color:"#f77c7c", cursor: 'pointer'}}>退出登录</span>
-        </p>
-        :
-        <Button
-          type="primary"
-          style={{ marginBottom: 10 }}
-          onClick={onLogin}
-        >
-          登录
-      </Button>
-      }
+        {/* <Menu onClick={handleClick} mode="horizontal">
+          <SubMenu
+            key="SubMenu"
+            title="地图页面"
+          >       
+            <Menu.Item key="1">
+              <Link to='/note'>高德地图行政区域</Link>
+            </Menu.Item>
+            <Menu.Item key="2">Option 2</Menu.Item>
+          </SubMenu>
+        </Menu> */}
+      </div>
+
       <Form onFinish={onFinish} form={form} {...formItemLayout}>
         <Form.Item name="title">
           <Input allowClear placeholder="输入标题关键字" />

@@ -37,7 +37,7 @@ module.exports = {
     }),
     addWebpackExternals({ //不做打包处理配置，如直接以cdn引入的
       echarts: "window.echarts",
-      // highcharts:"window.highcharts"
+       AMapUI:"window.AMapUI"
     }),
     (config) => { //暴露webpack的配置 config ,evn
       // 去掉打包生产map 文件

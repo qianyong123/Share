@@ -54,8 +54,6 @@ const Index = () => {
 
   }
 
-  console.log(loding)
-
   return (
     <Spin spinning={loding}>
       <div className="detailBox">

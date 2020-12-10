@@ -44,9 +44,9 @@ function Index() {
     }
   })
 
-  if (path === '/error' || path === '/admin') {
-    return null
-  }
+  // if (path === '/error' || path === '/admin') {
+  //   return null
+  // }
 
  
 
