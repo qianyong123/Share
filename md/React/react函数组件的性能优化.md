@@ -14,7 +14,7 @@ React.memo 是在 16.6 中新增的 API，与 PureComponent 相似，可以减�
 下面我们从问题入手：
 
 index.js：
-
+```jaz
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Child from "./Child";
@@ -32,6 +32,7 @@ const App = () => {
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));
+```
 复制代码
 其中包含了一个子组件 Child。
 
