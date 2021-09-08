@@ -14,7 +14,7 @@ React.memo 是在 16.6 中新增的 API，与 PureComponent 相似，可以减�
 下面我们从问题入手：
 
 index.js：
-```jaz
+```jsx
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Child from "./Child";
@@ -37,7 +37,7 @@ ReactDOM.render(<App />, document.getElementById("root"));
 其中包含了一个子组件 Child。
 
 Child.js：
-
+```jsx
 import React from "react";
 
 const Child = ({ name }) => {
@@ -46,6 +46,8 @@ const Child = ({ name }) => {
 };
 
 export default Child;
+```
+
 复制代码
 当首次渲染的时候，会在控制台打印 「陈星星」。当在页面上点击 button 来更改 title 时，title 更改了，但是 「陈星星」也会被打印出来，而传递给 Child 组件的 props 并没有发生改变。我们知道原因是 —— 当父组件重新 render 也会导致子组件重新 render。
 
@@ -61,7 +63,7 @@ React.memo 是一个高阶组件，可以用它来包裹一个函数式组件之
 export default React.memo(Child);
 复制代码
 由于 React.memo 默认情况下只会对参数进行浅比较，如果我们想控制对比过程，React.memo 是支持第二个参数的，我们可以将自定义的比较函数通过第二个参数传入来实现。
-
+```jsx
 const MyComponent = (props) => {
   /* 使用 props 渲染 */
 };
@@ -73,6 +75,7 @@ const areEqual = (prevProps, nextProps) => {
   */
 };
 export default React.memo(MyComponent, areEqual);
+```
 复制代码
 比较时，我们应当尽可能地做到精细化比对。
 
@@ -82,7 +85,7 @@ export default React.memo(MyComponent, areEqual);
 现在我们稍稍改动下上面的例子，给子组件 Child 传递一个函数 props。
 
 App.js：
-
+```jsx
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Child from "./Child";
@@ -104,9 +107,10 @@ const App = () => {
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));
+```
 复制代码
 Child.js：
-
+```jsx
 import React from "react";
 
 const Child = ({ name, onClick }) => {
@@ -115,6 +119,7 @@ const Child = ({ name, onClick }) => {
 };
 
 export default React.memo(Child);
+```
 复制代码
 我们使用了 React.memo，并且传递给 Child 组件的 props 似乎也没有发生改变，但是在点击 button 之后，依然打印出了「陈星星」，为什么呢？
 
@@ -123,7 +128,7 @@ export default React.memo(Child);
 同样地，如果传递给子组件的是一个普通的引用变量，也会发生同样的情况：
 
 App.js：
-
+```jsx
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import Child from "./Child";
@@ -143,6 +148,7 @@ const App = () => {
 };
 
 ReactDOM.render(<App />, document.getElementById("root"));
+```
 复制代码
 Child.js：
 
